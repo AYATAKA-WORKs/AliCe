@@ -2,7 +2,7 @@
 #include "var.h"
 #include "Parameter.h"
 
-// control Velocity
+
 void Control::getControlVelocity(float tar_velocity_l, float tar_velocity_r) {
 	float Kp = Kvp, Ki = Kvi, Kd = Kvd;
 	if(flag.bit.enable_enc == 1) {
@@ -12,8 +12,8 @@ void Control::getControlVelocity(float tar_velocity_l, float tar_velocity_r) {
 		ve_s_error_r += ve_error_r[1] * 0.001;
 		ve_d_error_l = (ve_error_l[1] - ve_error_l[0]) / 0.001;
 		ve_d_error_r = (ve_error_r[1] - ve_error_r[0]) / 0.001;
-		duty_l = (ve_error_l[1] * Kp + ve_s_error_l * Ki + ve_d_error_l * Kd);
-		duty_r = (ve_error_r[1] * Kp + ve_s_error_r * Ki + ve_d_error_r * Kd);
+		duty_l += (ve_error_l[1] * Kp + ve_s_error_l * Ki + ve_d_error_l * Kd);
+		duty_r += (ve_error_r[1] * Kp + ve_s_error_r * Ki + ve_d_error_r * Kd);
 		ve_error_l[0] = ve_error_l[1];
 		ve_error_r[0] = ve_error_r[1];
 	}	
@@ -27,8 +27,8 @@ void Control::getControlDsp(float tar_dsp){
 		gy_error[1] = (tar_dsp + getControlDiag() + getControlWall() - (gyro.z_dps - gyro.z_dps_offset) * gyro.Kf);
 		gy_s_error += gy_error[1] * 0.001;
 		gy_d_error = (gy_error[1] - gy_error[0]) / 0.001;
-		duty_l = -(gy_error[1] * Kp + gy_s_error * Ki + gy_d_error * Kd);
-		duty_r = (gy_error[1] * Kp + gy_s_error * Ki + gy_d_error * Kd);
+		duty_l -= (gy_error[1] * Kp + gy_s_error * Ki + gy_d_error * Kd);
+		duty_r += (gy_error[1] * Kp + gy_s_error * Ki + gy_d_error * Kd);
 		gy_error[0] = gy_error[1];
 
 		gyro.z_deg += (gyro.z_dps - gyro.z_dps_offset) * 0.001;

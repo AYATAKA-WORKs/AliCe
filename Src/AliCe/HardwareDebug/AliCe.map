@@ -1,4 +1,4 @@
-Renesas Optimizing Linker (W2.07.00 )             24-Jun-2018 17:56:27
+Renesas Optimizing Linker (W2.07.00 )             24-Jun-2018 21:12:29
 
 *** Options ***
 
@@ -10,7 +10,6 @@ Renesas Optimizing Linker (W2.07.00 )             24-Jun-2018 17:56:27
 -input=".\generate\sbrk.obj"
 -input=".\generate\vecttbl.obj"
 -input=".\src\AliCe.obj"
--library=".\AliCe.lib"
 -input=".\src\Control.obj"
 -input=".\src\Encoder.obj"
 -input=".\src\Log.obj"
@@ -28,6 +27,7 @@ Renesas Optimizing Linker (W2.07.00 )             24-Jun-2018 17:56:27
 -input=".\src\run.obj"
 -input=".\src\speaker_func.obj"
 -input=".\src\var.obj"
+-library=".\AliCe.lib"
 -start=SU,SI,B_1,R_1,B_2,R_2,B,R/04,PResetPRG,C_1,C_2,C,C$*,D*,W*,L,PIntPRG,P/0FFF80000,FIXEDVECT/0FFFFFF80
 -output=AliCe.abs
 -form=absolute
@@ -93,6 +93,6 @@ L
 PIntPRG
                                   fff813cd  fff815a6       1da   1
 P
-                                  fff815a7  fff9dd13     1c76d   1
+                                  fff815a7  fff9dd22     1c77c   1
 FIXEDVECT
                                   ffffff80  ffffffff        80   4
