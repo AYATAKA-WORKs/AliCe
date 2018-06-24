@@ -1,0 +1,9 @@
+SCRIPT_AREA_BORDER=\#ABB2BF | \#282C34 | null | null | null | null
+commentBorder=\#5C6370 | \#282C34 | null | true | null | null
+commentText=\#5C6370 | \#282C34 | null | true | null | null
+eclipse.preferences.version=1
+jsp_content=\#ABB2BF | \#282C34 | null | null | null | null
+tagAttributeEquals=\#ABB2BF | \#282C34 | null | null | null | null
+tagAttributeName=\#C678DD | \#282C34 | false | null | null | null
+tagAttributeValue=\#98C379 | \#282C34 | null | null | null | null
+tagBorder=\#61AFEF | \#282C34 | null | null | null | null

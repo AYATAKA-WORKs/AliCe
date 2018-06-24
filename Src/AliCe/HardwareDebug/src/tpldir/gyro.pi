@@ -1,0 +1,14 @@
+-We=--template_info_file="E:\GitLocalRepository\AliCe\Src\AliCe\HardwareDebug\src\tpldir\gyro.ti"
+-We=--ii_file="E:\GitLocalRepository\AliCe\Src\AliCe\HardwareDebug\src\tpldir\gyro.ii"
+-We=--tentative_info_file="E:\GitLocalRepository\AliCe\Src\AliCe\HardwareDebug\src\tpldir\gyro.td"
+
+-output=obj="E:\GitLocalRepository\AliCe\Src\AliCe\HardwareDebug\src\gyro.obj"
+-isa=rxv1
+-fpu
+-include=C:\Program Files (x86)\Renesas\RX\2_7_0\include,E:\GitLocalRepository\AliCe\Src\AliCe\generate
+-lang=cpp
+-nomessage
+-debug
+-optimize=0
+-nologo
+"../src/gyro.cpp"

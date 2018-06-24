@@ -1,0 +1,98 @@
+Renesas Optimizing Linker (W2.07.00 )             24-Jun-2018 17:56:27
+
+*** Options ***
+
+-subcommand=LinkerSubCommand.tmp
+-input=".\generate\dbsct.obj"
+-input=".\generate\hwsetup.obj"
+-input=".\generate\intprg.obj"
+-input=".\generate\resetprg.obj"
+-input=".\generate\sbrk.obj"
+-input=".\generate\vecttbl.obj"
+-input=".\src\AliCe.obj"
+-library=".\AliCe.lib"
+-input=".\src\Control.obj"
+-input=".\src\Encoder.obj"
+-input=".\src\Log.obj"
+-input=".\src\Maze.obj"
+-input=".\src\Motor.obj"
+-input=".\src\PhotoSensor.obj"
+-input=".\src\Serial.obj"
+-input=".\src\gyro.obj"
+-input=".\src\initClock.obj"
+-input=".\src\initNonExistentPort.obj"
+-input=".\src\initSetting.obj"
+-input=".\src\initStopModule.obj"
+-input=".\src\interrupt.obj"
+-input=".\src\parameter.obj"
+-input=".\src\run.obj"
+-input=".\src\speaker_func.obj"
+-input=".\src\var.obj"
+-start=SU,SI,B_1,R_1,B_2,R_2,B,R/04,PResetPRG,C_1,C_2,C,C$*,D*,W*,L,PIntPRG,P/0FFF80000,FIXEDVECT/0FFFFFF80
+-output=AliCe.abs
+-form=absolute
+-nomessage
+-list=AliCe.map
+-nooptimize
+-rom=D=R,D_1=R_1,D_2=R_2
+-nologo
+
+*** Error information ***
+
+*** Mapping List ***
+
+SECTION                            START      END         SIZE   ALIGN
+SU
+                                  00000004  00002003      2000   4
+SI
+                                  00002004  00003503      1500   4
+B_1
+                                  00003504  00003567        64   1
+R_1
+                                  00003568  000035bb        54   1
+B_2
+                                  000035bc  000043bd       e02   2
+R_2
+                                  000043be  000043be         0   1
+B
+                                  000043c0  00008907      4548   4
+R
+                                  00008908  000090cb       7c4   4
+PResetPRG
+                                  fff80000  fff80030        31   1
+C_1
+                                  fff80031  fff80108        d8   1
+C_2
+                                  fff8010a  fff8030b       202   2
+C
+                                  fff8030c  fff80437       12c   4
+C$DSEC
+                                  fff80438  fff8045b        24   4
+C$BSEC
+                                  fff8045c  fff80473        18   4
+C$INIT
+                                  fff80474  fff80477         4   4
+C$VECT
+                                  fff80478  fff80877       400   4
+C$VTBL
+                                  fff80878  fff80878         0   1
+D
+                                  fff80878  fff8103b       7c4   4
+D_1
+                                  fff8103c  fff8108f        54   1
+D_2
+                                  fff81090  fff81090         0   1
+W
+                                  fff81090  fff81090         0   4
+W_1
+                                  fff81090  fff81090         0   1
+W_2
+                                  fff81090  fff81149        ba   2
+L
+                                  fff8114c  fff813cc       281   4
+PIntPRG
+                                  fff813cd  fff815a6       1da   1
+P
+                                  fff815a7  fff9dd13     1c76d   1
+FIXEDVECT
+                                  ffffff80  ffffffff        80   4

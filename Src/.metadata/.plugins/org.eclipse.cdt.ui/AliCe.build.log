@@ -1,0 +1,6 @@
+00:28:41 **** プロジェクト AliCe に対する構成 HardwareDebug の ビルド ****
+make -j4 all 
+'Build complete.'
+
+00:28:41 ビルドが完了しました(所要時間 578ms)
+
