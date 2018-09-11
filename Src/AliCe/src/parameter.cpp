@@ -10,8 +10,8 @@
 //-------------------------------------------------------------------
 //	ゴール座標
 //-------------------------------------------------------------------
-const char X_GOAL = 1;
-const char Y_GOAL = 0;
+const char X_GOAL = 7;
+const char Y_GOAL = 7;
 
 //-------------------------------------------------------------------
 //	方向シンボル
@@ -81,12 +81,12 @@ TurnType turn_1000 = {&sturn_L_90_700,&sturn_R_90_700,&lturn_L_90_1000,&lturn_R_
 //-------------------------------------------------------------------
 //	センサ閾値
 //-------------------------------------------------------------------
-const int SEN_LF_TH = 80;
-const int SEN_RF_TH = 55;
+const int SEN_LF_TH = 42;
+const int SEN_RF_TH = 34;
 const int SEN_LS_TH = 100;
 const int SEN_RS_TH = 100;
-const int SEN_LSS_TH = 150;
-const int SEN_RSS_TH = 200;
+const int SEN_LSS_TH = 100;
+const int SEN_RSS_TH = 150;
 
 const int  SEN_LSS_FIX_TH = 250;
 const int  SEN_RSS_FIX_TH = 300;
@@ -111,16 +111,16 @@ const int  SEN_LF_REF = 60;
 const int  SEN_RF_REF = 40;
 const int  SEN_LS_REF = 422;
 const int  SEN_RS_REF = 100;
-const int  SEN_LSS_REF = 335;
-const int  SEN_RSS_REF = 345;
+const int  SEN_LSS_REF = 750;
+const int  SEN_RSS_REF = 482;
 
 //-------------------------------------------------------------------
 //	壁切れ補正
 //-------------------------------------------------------------------
-const float  FIX_DISTANCE_L = 71.0;
-const float  FIX_DISTANCE_R = 65.0;
-const float  FIX_DISTANCE_L2 = 10.0;
-const float  FIX_DISTANCE_R2 = 10.0;
+const float  FIX_DISTANCE_L = 63.0;
+const float  FIX_DISTANCE_R = 71.0;
+const float  FIX_DISTANCE_L2 = 46.0;
+const float  FIX_DISTANCE_R2 = 55.0;
 const float  FIX_DISTANCE_L3 = 160.0;
 const float  FIX_DISTANCE_R3 = 100.0;
 

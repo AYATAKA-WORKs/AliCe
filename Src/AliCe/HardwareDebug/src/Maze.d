@@ -9,8 +9,8 @@ src/Maze.obj src/Maze.d: ../src/var.h
 ../src/var.h:
 src/Maze.obj src/Maze.d: ../src/run.h
 ../src/run.h:
-src/Maze.obj src/Maze.d: E:\GitLocalRepository\AliCe\Src\AliCe\generate\iodefine.h
-E:\GitLocalRepository\AliCe\Src\AliCe\generate\iodefine.h:
+src/Maze.obj src/Maze.d: D:\GitLocalRepository\AliCe\Src\AliCe\generate\iodefine.h
+D:\GitLocalRepository\AliCe\Src\AliCe\generate\iodefine.h:
 src/Maze.obj src/Maze.d: ../src/initSetting.h
 ../src/initSetting.h:
 src/Maze.obj src/Maze.d: ../src/initNonExistentPort.h

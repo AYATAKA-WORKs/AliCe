@@ -2,20 +2,20 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="false" key="isRegEx"/>
-		<item value="makePath" key="selection"/>
+		<item value="makePathMap" key="selection"/>
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
 		<item value="false" key="wholeword"/>
 		<list key="findhistory">
-			<item value="makePath"/>
-			<item value="initValue"/>
-			<item value="adati_flag"/>
-			<item value="flag.bit.falesafe"/>
-			<item value="flag"/>
-			<item value="getWallInfo"/>
-			<item value="wall.data_h"/>
-			<item value="mouse.s_turn(turn_R_90_500)"/>
+			<item value="makePathMap"/>
+			<item value="check"/>
+			<item value="chekSea"/>
+			<item value="chekSearched"/>
+			<item value="SEN_LS"/>
+			<item value="LS"/>
+			<item value="RS"/>
+			<item value="RSS"/>
 		</list>
 		<list key="replacehistory">
 			<item value="mouse.s_turn(turn_R_90_500)"/>
@@ -32,7 +32,7 @@
 		<item value="330" key="DIALOG_WIDTH"/>
 		<item value="1|Yu Gothic UI|9.0|0|WINDOWS|1|-12|0|0|0|400|0|0|0|1|0|0|0|0|Yu Gothic UI" key="DIALOG_FONT_NAME"/>
 		<item value="391" key="DIALOG_HEIGHT"/>
-		<item value="955" key="DIALOG_X_ORIGIN"/>
-		<item value="207" key="DIALOG_Y_ORIGIN"/>
+		<item value="1479" key="DIALOG_X_ORIGIN"/>
+		<item value="108" key="DIALOG_Y_ORIGIN"/>
 	</section>
 </section>
