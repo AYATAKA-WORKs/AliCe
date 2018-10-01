@@ -5,8 +5,8 @@ src/var.obj src/var.d: ../src/var.h
 ../src/var.h:
 src/var.obj src/var.d: ../src/run.h
 ../src/run.h:
-src/var.obj src/var.d: D:\GitLocalRepository\AliCe\Src\AliCe\generate\iodefine.h
-D:\GitLocalRepository\AliCe\Src\AliCe\generate\iodefine.h:
+src/var.obj src/var.d: E:\GitLocalRepository\AliCe\Src\AliCe\generate\iodefine.h
+E:\GitLocalRepository\AliCe\Src\AliCe\generate\iodefine.h:
 src/var.obj src/var.d: ../src/initSetting.h
 ../src/initSetting.h:
 src/var.obj src/var.d: ../src/initNonExistentPort.h

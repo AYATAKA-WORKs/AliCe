@@ -117,12 +117,12 @@ const int  SEN_RSS_REF = 482;
 //-------------------------------------------------------------------
 //	壁切れ補正
 //-------------------------------------------------------------------
-const float  FIX_DISTANCE_L = 63.0;
-const float  FIX_DISTANCE_R = 71.0;
-const float  FIX_DISTANCE_L2 = 46.0;
-const float  FIX_DISTANCE_R2 = 55.0;
-const float  FIX_DISTANCE_L3 = 160.0;
-const float  FIX_DISTANCE_R3 = 100.0;
+const float  FIX_DISTANCE_L = 63.0;		// 左小回りの壁切れ読み
+const float  FIX_DISTANCE_R = 71.0;		// 右小回りの壁切れ読み
+const float  FIX_DISTANCE_L2 = 46.0;	// 左大回り&左行き斜めの壁切れ読み
+const float  FIX_DISTANCE_R2 = 55.0;	// 右大回り&右行き斜めの壁切れ読み
+const float  FIX_DISTANCE_L3 = 160.0;	// 左斜め&左帰り斜めの壁切れ読み
+const float  FIX_DISTANCE_R3 = 100.0;	// 右斜め&右帰り斜めの壁切れ読み
 
 //-------------------------------------------------------------------
 //	制御定数

@@ -69,21 +69,24 @@ void Run::fixDistance(float tar_distance){
 		}
 	}
 	else if(flag.bit.wallfix_S == 1){
+		// 壁切れが入れられる時の位置判定(2018_10_02)
 		float dis_ref;
 		if(flag.bit.diagonal == 1) dis_ref = 180;
-		else dis_ref = 65;
+		else dis_ref = 300;	// 確実に壁切れが読めるような値にすること(2018_10_02)
 		if((tar_distance - distance_th) < dis_ref && fix_flag==0 && flag.bit.straight == 1){
 			 fix_flag = 1;
 		}
 		if((photo.int_dev[1] > SEN_LS_FIX_DEV) && (fix_flag == 1) && (end_flag != 1)){
-			if(flag.bit.diagonal == 1) distance_th = tar_distance - FIX_DISTANCE_L3;
-			else distance_th = tar_distance - FIX_DISTANCE_L2;
+			//if(flag.bit.diagonal == 1) distance_th = tar_distance - FIX_DISTANCE_L3;	// 斜め走行時の壁切れ補正OFF(2018_10_02)
+			//else distance_th = tar_distance - FIX_DISTANCE_L2;
+			if(!flag.bit.diagonal) distance_th = tar_distance - FIX_DISTANCE_L2;
 			end_flag = 1;
 			LED01 = 1;
 		}
 		else if((photo.int_dev[4] > SEN_RS_FIX_DEV) && (fix_flag == 1) && (end_flag != 1)){
-			if(flag.bit.diagonal == 1) distance_th = tar_distance - FIX_DISTANCE_R3;
-			else distance_th = tar_distance - FIX_DISTANCE_R2;
+			//if(flag.bit.diagonal == 1) distance_th = tar_distance - FIX_DISTANCE_R3;	// 斜め走行時の壁切れ補正OFF(2018_10_02)
+			//else distance_th = tar_distance - FIX_DISTANCE_R2;
+			if(!flag.bit.diagonal) distance_th = tar_distance - FIX_DISTANCE_R2;
 			end_flag = 1;
 			LED04 = 1;
 		}

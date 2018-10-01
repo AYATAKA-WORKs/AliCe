@@ -1884,7 +1884,10 @@ void Maze::ShortestRun(char mode, char x_goal, char y_goal, float accel, float m
 	printfPathMap(wall_buf);
 	printfPath();
 	for(int i=0; i <= path.num; i++){
+		// 走行準備処理
 		LEDOFF();
+		mouse.flag.bit.diagonal = 0; // 斜め走行フラグ閉じる（速度がゼロになる原因？）(2018_10_02)
+		// 走行処理
 		switch(path.type[i]){
 		case STGT:
 			// 壁センサON
@@ -1892,7 +1895,7 @@ void Maze::ShortestRun(char mode, char x_goal, char y_goal, float accel, float m
 			// 壁切れ種類切り替え
 			if(path.type[i + 1] == SMLL) mouse.flag.bit.wallfix_SS = 1;
 			else if(path.type[i + 1] == SMLR) mouse.flag.bit.wallfix_SS = 1;
-			else if(path.type[i + 1] == STGT) mouse.flag.bit.wallfix_SS = 1;
+			//else if(path.type[i + 1] == STGT) mouse.flag.bit.wallfix_SS = 1;	このケースには入らない？(2018_10_02)
 			else if(path.type[i + 1] == LL90) mouse.flag.bit.wallfix_S = 1;
 			else if(path.type[i + 1] == LR90) mouse.flag.bit.wallfix_S = 1;
 			else if(path.type[i + 1] == LL180) mouse.flag.bit.wallfix_S = 1;
@@ -1902,7 +1905,12 @@ void Maze::ShortestRun(char mode, char x_goal, char y_goal, float accel, float m
 			else if(path.type[i + 1] == GODL135) mouse.flag.bit.wallfix_S = 1;
 			else if(path.type[i + 1] == GODR135) mouse.flag.bit.wallfix_S = 1;
 			// 直進処理
-			mouse.straight(accel, mouse.velocity_th, type.l_turn90_l->velocity, maxVelocity, 90.0 * path.step[i] + 20.0);
+			if(mouse.flag.bit.wallfix_SS)
+			mouse.straight(accel, mouse.velocity_th, type.l_turn90_l->velocity, maxVelocity, 90.0 * path.step[i] + 20.0);	// 探索時壁切れ補正(2018_10_02)
+			else if(mouse.flag.bit.wallfix_S)
+			mouse.straight(accel, mouse.velocity_th, type.l_turn90_l->velocity, maxVelocity, 90.0 * path.step[i] + 90.0);	// オフセット区間を20→90へ増加（速度がゼロになるのを防げるか？）(2018_10_02)
+			else
+			mouse.straight(accel, mouse.velocity_th, type.l_turn90_l->velocity, maxVelocity, 90.0 * path.step[i]);	// 壁切れ補正しない場合(2018_10_02)
 			break;
 		case SMLL:
 			for(int j=0; j<path.step[i]; j++){
