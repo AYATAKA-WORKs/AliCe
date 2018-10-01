@@ -2,7 +2,6 @@
 #include "var.h"
 #include "Parameter.h"
 
-// control Velocity
 void Control::getControlVelocity(float tar_velocity_l, float tar_velocity_r) {
 	float Kp = Kvp, Ki = Kvi, Kd = Kvd;
 	if(flag.bit.enable_enc == 1) {

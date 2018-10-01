@@ -1,0 +1,195 @@
+/*
+ * parameter.h
+ *
+ *  Created on: 2017/09/25
+ *      Author: KOTA-NPC2
+ */
+
+#ifndef PARAMETER_H_
+#define PARAMETER_H_
+
+//-------------------------------------------------------------------
+//	ゴール座標
+//-------------------------------------------------------------------
+extern const char X_GOAL;
+extern const char Y_GOAL;
+
+//-------------------------------------------------------------------
+//	方向シンボル
+//-------------------------------------------------------------------
+extern const unsigned char L;
+extern const unsigned char R;
+extern const unsigned char STRAIGHT;
+extern const unsigned char BACK;
+
+//-------------------------------------------------------------------
+//	ターンパラメータ
+//-------------------------------------------------------------------
+typedef struct{
+	float dpss;
+	float velocity;
+	float u_offset;
+	float d_offset;
+	float b_deg;
+	float e_deg;
+	float deg;
+	char direction;
+	float Kf;
+}TurnParam;
+
+typedef struct{
+	TurnParam* s_turn_l;
+	TurnParam* s_turn_r;
+	TurnParam* l_turn90_l;
+	TurnParam* l_turn90_r;
+	TurnParam* l_turn180_l;
+	TurnParam* l_turn180_r;
+	TurnParam* gd_turn45_l;
+	TurnParam* gd_turn45_r;
+	TurnParam* gd_turn135_l;
+	TurnParam* gd_turn135_r;
+	TurnParam* rd_turn45_l;
+	TurnParam* rd_turn45_r;
+	TurnParam* rd_turn135_l;
+	TurnParam* rd_turn135_r;
+	TurnParam* v_turn90_l;
+	TurnParam* v_turn90_r;
+}TurnType;
+
+// 小回り
+extern TurnParam sturn_L_90_500;
+extern TurnParam sturn_R_90_500;
+extern TurnParam sturn_L_90_700;
+extern TurnParam sturn_R_90_700;
+extern TurnParam sturn_L_90_800;
+extern TurnParam sturn_R_90_800;
+extern TurnParam sturn_L_90_1000;
+extern TurnParam sturn_R_90_1000;
+
+// 大回り90
+extern TurnParam lturn_L_90_500;
+extern TurnParam lturn_R_90_500;
+extern TurnParam lturn_L_90_700;
+extern TurnParam lturn_R_90_700;
+extern TurnParam lturn_L_90_800;
+extern TurnParam lturn_R_90_800;
+extern TurnParam lturn_L_90_1000;
+extern TurnParam lturn_R_90_1000;
+
+// 大回り180
+extern TurnParam lturn_L_180_700;
+extern TurnParam lturn_R_180_700;
+extern TurnParam lturn_L_180_800;
+extern TurnParam lturn_R_180_800;
+extern TurnParam lturn_L_180_1000;
+extern TurnParam lturn_R_180_1000;
+
+// 行き斜め45
+extern TurnParam gdturn_L_45_1000;
+extern TurnParam gdturn_R_45_1000;
+
+// 行き斜め135
+extern TurnParam gdturn_L_135_1000;
+extern TurnParam gdturn_R_135_1000;
+
+// 帰り斜め45
+extern TurnParam rdturn_L_45_1000;
+extern TurnParam rdturn_R_45_1000;
+
+// 帰り斜め135
+extern TurnParam rdturn_L_135_1000;
+extern TurnParam rdturn_R_135_1000;
+
+// V90斜め
+extern TurnParam vturn_L_90_1000;
+extern TurnParam vturn_R_90_1000;
+
+extern TurnType turn_700;
+extern TurnType turn_800;
+extern TurnType turn_1000;
+
+//-------------------------------------------------------------------
+//	センサ閾値
+//-------------------------------------------------------------------
+extern const int SEN_LF_TH;
+extern const int SEN_RF_TH;
+extern const int SEN_LS_TH;
+extern const int SEN_RS_TH;
+extern const int SEN_LSS_TH;
+extern const int SEN_RSS_TH;
+
+extern const int  SEN_LSS_FIX_TH;
+extern const int  SEN_RSS_FIX_TH;
+extern const int  SEN_LSS_FIX_DEV;
+extern const int  SEN_RSS_FIX_DEV;
+extern const int  SEN_LS_FIX_TH;
+extern const int  SEN_RS_FIX_TH;
+extern const int  SEN_LS_FIX_DEV;
+extern const int  SEN_RS_FIX_DEV;
+
+extern const int SEN_LSS_DIG_TH;
+extern const int SEN_RSS_DIG_TH;
+
+extern const int  SEN_LF_DEV;
+extern const int  SEN_RF_DEV;
+extern const int  SEN_LS_DEV;
+extern const int  SEN_RS_DEV;
+extern const int  SEN_LSS_DEV;
+extern const int  SEN_RSS_DEV;
+
+extern const int  SEN_LF_REF;
+extern const int  SEN_RF_REF;
+extern const int  SEN_LS_REF;
+extern const int  SEN_RS_REF;
+extern const int  SEN_LSS_REF;
+extern const int  SEN_RSS_REF;
+
+//-------------------------------------------------------------------
+//	壁切れ補正
+//-------------------------------------------------------------------
+extern const float  FIX_DISTANCE_L;
+extern const float  FIX_DISTANCE_R;
+extern const float  FIX_DISTANCE_L2;
+extern const float  FIX_DISTANCE_R2;
+extern const float  FIX_DISTANCE_L3;
+extern const float  FIX_DISTANCE_R3;
+
+//-------------------------------------------------------------------
+//	制御定数
+//-------------------------------------------------------------------
+// 速度関連
+extern const float Kvp;
+extern const float Kvi;
+extern const float Kvd;
+// 角速度関連
+extern const float Kgp;
+extern const float Kgi;
+extern const float Kgd;
+// 距離センサ関連
+extern const float Kpp;
+extern const float Kpd;
+
+//-------------------------------------------------------------------
+//	機体特性
+//-------------------------------------------------------------------
+extern const float TIRE_R;
+extern const float TIRE_L;
+extern const float TORED;
+
+//-------------------------------------------------------------------
+//	I/Oレジスタ
+//-------------------------------------------------------------------
+#define LED01 PORT3.PODR.BIT.B1
+#define LED02 PORT2.PODR.BIT.B7
+#define LED03 PORT5.PODR.BIT.B5
+#define LED04 PORT5.PODR.BIT.B4
+#define LED05 PORTA.PODR.BIT.B4
+#define LED06 PORTE.PODR.BIT.B5
+
+#define L_IN1 PORTC.PODR.BIT.B5
+#define L_IN2 PORTC.PODR.BIT.B6
+#define R_IN1 PORTC.PODR.BIT.B3
+#define R_IN2 PORTC.PODR.BIT.B4
+#define M_STBY PORTC.PODR.BIT.B2
+
+#endif

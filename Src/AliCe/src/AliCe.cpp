@@ -116,7 +116,7 @@ void main(void) {
 			mode10();
 			break;
 		case 11:
-			mode11();
+			mode11();	// 宴会芸
 			break;
 		case 12:
 			mode12();
@@ -157,11 +157,11 @@ void mode01(void){
 	maze.direction_vectle[1] = 1;
 	maze.now_position[0] = 0;
 	maze.now_position[1] = 0;
-	//maze.adatihou(X_GOAL,Y_GOAL);
-	maze.FurukawaSearch(X_GOAL,Y_GOAL);
-	CSTR (CMT2) = 0;		// CMT2停止
+	maze.adatihou(X_GOAL,Y_GOAL);
+	//maze.FurukawaSearch(X_GOAL,Y_GOAL);
 	//maze.adatihou(0,0);
-	maze.FurukawaSearch(0,0);
+	CSTR (CMT2) = 0;		// CMT2停止
+	//maze.FurukawaSearch(0,0);
 	mouse.flag.bit.adati_flag = 0;
 	mouse.flag.bit.falesafe = 0;
 }
@@ -171,7 +171,7 @@ void mode02(void){
 	mouse.gyro.calibration();
 	LED_off();
 	SpeakerEnable();
-	CSTR (CMT2) = 0;		// CMT2開始
+	CSTR (CMT2) = 1;		// CMT2開始
 	mouse.flag.bit.adati_flag = 1;
 	mouse.flag.bit.wallfix_SS = 1;
 	mouse.flag.bit.wallfix_S = 0;
@@ -180,7 +180,7 @@ void mode02(void){
 	maze.now_position[0] = 0;
 	maze.now_position[1] = 0;
 	maze.adatihou(X_GOAL,Y_GOAL);
-	CSTR (CMT2) = 0;		// CMT2開始
+	CSTR (CMT2) = 1;		// CMT2開始
 	maze.adatihou(0,0);
 	mouse.flag.bit.adati_flag = 0;
 	mouse.flag.bit.falesafe = 0;
@@ -241,7 +241,7 @@ void mode04(void){
 	case 0:	//ダミー
 		break;
 	case 1:	// 斜め最短/大回り1000/ 斜め1000/ 直進2000
-		//mouse.satartSuction();
+		mouse.satartSuction();
 		wait_timer(1500);
 		maze.ShortestRun(0, X_GOAL, Y_GOAL, 10000.0, 2000.0, turn_1000, 1000.0);
 		mouse.flag.bit.falesafe = 0;
@@ -388,7 +388,7 @@ void mode06(void){	// 調整用モード
 			break;
 		}
 		break;
-	case 1: // 右ターン調整用
+	case 1: // 右スラロームオフセット調整用
 		mouse.flag.bit.enable_phot = 0;
 		mode = 0;
 		modeSelect(6);
@@ -532,23 +532,15 @@ void mode06(void){	// 調整用モード
 		mouse.gyro.initMPU();
 		mouse.gyro.calibration();
 		LED_off();
-		//mouse.satartSuction();
+		mouse.satartSuction();
 		mouse.flag.bit.enable_phot = 1;
 		mouse.end_flag = 0;
-		mouse.flag.bit.wallfix_SS = 0;	// 小回りの時は1
-		mouse.flag.bit.wallfix_S = 1;	// 大回り・斜めの時は1
-		mouse.flag.bit.diagonal = 0;	// 斜めの時は1
-		// 直進進入用
-		//mouse.straight(7000.0,0.0,700.0,700.0, 450.0 + 70.0);
-		mouse.straight(10000.0,0.0,2000.0,2000.0, 450.0);
-		// 斜め進入用
-		//mouse.straight(10000.0,0.0,2000.0,3000.0, 540.0 * 1.4141 + 0.0);
+		mouse.flag.bit.wallfix_SS = 0;
+		mouse.flag.bit.wallfix_S = 1;
+		mouse.flag.bit.diagonal = 1;
+		mouse.straight(10000.0,0.0,2000.0,3000.0, 540.0 * 1.4141 + 0.0);
 		mouse.end_flag = 1;
-		// 直進進入用
-		//mouse.straight(7000.0,700.0,0.0,700.0, 90.0);
-		mouse.straight(10000.0,2000.0,0.0,2000.0, 270.0);
-		// 斜め進入用
-		//mouse.straight(10000.0,2000.0,0.0,2000.0, 90.0 * 1.4141);
+		mouse.straight(10000.0,2000.0,0.0,2000.0, 90.0 * 1.4141);
 		wait_timer(1000);
 		break;
 	case 8: // その他
@@ -654,11 +646,9 @@ void mode10(void){
 	mouse.gyro.initMPU();
 	mouse.gyro.calibration();
 	mouse.flag.byte = 0x17;
-	mouse.gyro.Kf = 1.0;
-	mouse.motor_l.enable();
-	mouse.motor_r.enable();
+	mouse.motor_l.enable();		// left motor on
+	mouse.motor_r.enable();		// right motor on
 	while(1){
-		mouse.deg_v = 0;
 		mouse.velocity_th = 0;
 	}
 }
@@ -713,19 +703,20 @@ void mode13(void){
 }
 
 void mode14(void){
-	mouse.gyro.initMPU();
-	mouse.gyro.calibration();
-	myprintf("%f\r\n",mouse.gyro.z_dps_offset);
-//	while(1) {
-//		mouse.gyro.getDisp();
-//		wait_timer(1);
-//		myprintf("%f\r\n",mouse.gyro.z_dps);
-//	}
+//	mouse.gyro.initMPU();
+//	mouse.gyro.calibration();
+//	myprintf("%f\r\n",mouse.gyro.z_dps_offset);
+////	while(1) {
+////		mouse.gyro.getDisp();
+////		wait_timer(1);
+////		myprintf("%f\r\n",mouse.gyro.z_dps);
+////	}
 }
 
 void mode15(void){
 	mouse.satartSuction();
-	while(1);
+	wait_timer(1000);
+	mouse.stopSuction();
 }
 
 //-------------------------------------------------------------------
