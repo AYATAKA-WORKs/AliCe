@@ -53,7 +53,7 @@ void Maze::getWallData(void){
 			//絶対的右
 			wall.data_v[now_position[0]+ 1] |= (0x1 << now_position[1]);
 		}
-		if(mouse.photo.value[0] > SEN_LF_TH && mouse.photo.value[5] > SEN_RF_TH){
+		if((mouse.photo.value[0] + mouse.photo.value[5]) > (SEN_LF_TH + SEN_RF_TH)){
 			//絶対的上
 			wall.data_h[now_position[1]+1] |= (0x1 << now_position[0]);
 		}
@@ -68,7 +68,7 @@ void Maze::getWallData(void){
 			//絶対的左
 			wall.data_v[now_position[0]] |= (0x1 << now_position[1]);
 		}
-		if(mouse.photo.value[0] > SEN_LF_TH && mouse.photo.value[5] > SEN_RF_TH){
+		if((mouse.photo.value[0] + mouse.photo.value[5]) > (SEN_LF_TH + SEN_RF_TH)){
 			//絶対的下
 			wall.data_h[now_position[1]] |= (0x1 << now_position[0]);
 		}
@@ -83,7 +83,7 @@ void Maze::getWallData(void){
 			//絶対的下
 			wall.data_h[now_position[1]] |= (0x1 << now_position[0]);
 		}
-		if(mouse.photo.value[0] > SEN_LF_TH && mouse.photo.value[5] > SEN_RF_TH){
+		if((mouse.photo.value[0] + mouse.photo.value[5]) > (SEN_LF_TH+ SEN_RF_TH)){
 			//絶対的右
 			wall.data_v[now_position[0] + 1] |= (0x1 << now_position[1]);
 		}
@@ -98,7 +98,7 @@ void Maze::getWallData(void){
 			//絶対的上
 			wall.data_h[now_position[1] + 1] |= (0x1 << now_position[0]);
 		}
-		if(mouse.photo.value[0] > SEN_LF_TH && mouse.photo.value[5] > SEN_RF_TH){
+		if((mouse.photo.value[0] + mouse.photo.value[5]) > (SEN_LF_TH + SEN_RF_TH)){
 			//絶対的左
 			wall.data_v[now_position[0]] |= (0x1 << now_position[1]);
 		}
@@ -290,7 +290,7 @@ void Maze::adatihou (char x_goal,char y_goal){
 			getWallData();
 			getMap(x_goal,y_goal);
 			if((direction_vectle[0] == 0) && (direction_vectle[1] == 1)){
-				if((now_position[1] < 15) && mouse.photo.value[0] < SEN_LF_TH && mouse.photo.value[5] < SEN_RF_TH &&
+				if((now_position[1] < 15) && ((mouse.photo.value[0] + mouse.photo.value[5] ) < (SEN_LF_TH +SEN_RF_TH)) &&
 						step_number[now_position[0]][now_position[1] + 1] + 1 == step_number[now_position[0]][now_position[1]] ){
 					mouse.flag.bit.enable_phot = 1;
 					mouse.straight(7000.0,mouse.velocity_th, MAX_VELOCITY, MAX_VELOCITY, 180.0);
@@ -328,7 +328,7 @@ void Maze::adatihou (char x_goal,char y_goal){
 			}
 
 			else if((direction_vectle[0] == 0) && (direction_vectle[1] == -1)){
-				if( (now_position[1] > 0) && mouse.photo.value[0] < SEN_LF_TH && mouse.photo.value[5] < SEN_RF_TH &&
+				if( (now_position[1] > 0) && ((mouse.photo.value[0] + mouse.photo.value[5] ) < (SEN_LF_TH +SEN_RF_TH)) &&
 						step_number[now_position[0]][now_position[1] - 1] +1 == step_number[now_position[0]][now_position[1]] ){
 					mouse.flag.bit.enable_phot = 1;
 					mouse.end_flag = 0;
@@ -367,7 +367,7 @@ void Maze::adatihou (char x_goal,char y_goal){
 			}
 
 			else if((direction_vectle[0] == 1) && (direction_vectle[1] == 0)){
-				if((now_position[0] < 15) && mouse.photo.value[0] < SEN_LF_TH && mouse.photo.value[5] < SEN_RF_TH &&
+				if((now_position[0] < 15) && ((mouse.photo.value[0] + mouse.photo.value[5] ) < (SEN_LF_TH +SEN_RF_TH)) &&
 						step_number[now_position[0]+1][now_position[1]] +1 == step_number[now_position[0]][now_position[1]] ){
 					mouse.flag.bit.enable_phot = 1;
 					mouse.end_flag = 0;
@@ -405,7 +405,7 @@ void Maze::adatihou (char x_goal,char y_goal){
 				}
 			}
 			else if((direction_vectle[0] == -1) && (direction_vectle[1] == 0)){
-				if((now_position[0] > 0) && mouse.photo.value[0] < SEN_LF_TH && mouse.photo.value[5] < SEN_RF_TH &&
+				if((now_position[0] > 0) && ((mouse.photo.value[0] + mouse.photo.value[5] ) < (SEN_LF_TH +SEN_RF_TH)) &&
 						step_number[now_position[0]-1][now_position[1]] +1 == step_number[now_position[0]][now_position[1]] ){
 					mouse.flag.bit.enable_phot = 1;
 					mouse.end_flag = 0;
@@ -529,7 +529,7 @@ void Maze::FurukawaSearch (char x_goal,char y_goal){
 			getMap(x_goal,y_goal);
 			if((direction_vectle[0] == 0) && (direction_vectle[1] == 1)){
 				//上方向、未探索直進
-				if((now_position[1] < 15) && mouse.photo.value[0] < SEN_LF_TH && mouse.photo.value[5] < SEN_RF_TH &&
+				if((now_position[1] < 15) && ((mouse.photo.value[0] + mouse.photo.value[5] ) < (SEN_LF_TH +SEN_RF_TH)) &&
 						checkSearched(now_position[0] + 1, now_position[1], wall) == 0 ){
 					mouse.flag.bit.enable_phot = 1;
 					mouse.straight(7000.0,mouse.velocity_th, MAX_VELOCITY, MAX_VELOCITY, 180.0);
@@ -552,7 +552,7 @@ void Maze::FurukawaSearch (char x_goal,char y_goal){
 					mouse.s_turn(sturn_R_90_700);
 					getNowPosition(R);
 				}
-				else if((now_position[1] < 15) && mouse.photo.value[0] < SEN_LF_TH && mouse.photo.value[5] < SEN_RF_TH &&
+				else if((now_position[1] < 15) && ((mouse.photo.value[0] + mouse.photo.value[5] ) < (SEN_LF_TH +SEN_RF_TH)) &&
 						step_number[now_position[0]][now_position[1] + 1] < step_number[now_position[0]][now_position[1]] ){
 					mouse.flag.bit.enable_phot = 1;
 					mouse.straight(7000.0,mouse.velocity_th, MAX_VELOCITY, MAX_VELOCITY, 180.0);
@@ -591,7 +591,7 @@ void Maze::FurukawaSearch (char x_goal,char y_goal){
 
 			else if((direction_vectle[0] == 0) && (direction_vectle[1] == -1)){
 				//下方向、未探索直進
-				if( (now_position[1] > 0) && mouse.photo.value[0] < SEN_LF_TH && mouse.photo.value[5] < SEN_RF_TH &&
+				if( (now_position[1] > 0) && ((mouse.photo.value[0] + mouse.photo.value[5] ) < (SEN_LF_TH +SEN_RF_TH)) &&
 						checkSearched(now_position[0], now_position[1] - 1, wall) == 0){
 					mouse.flag.bit.enable_phot = 1;
 					mouse.end_flag = 0;
@@ -615,7 +615,7 @@ void Maze::FurukawaSearch (char x_goal,char y_goal){
 					mouse.s_turn(sturn_R_90_700);
 					getNowPosition(R);
 				}
-				else if( (now_position[1] > 0) && mouse.photo.value[0] < SEN_LF_TH && mouse.photo.value[5] < SEN_RF_TH &&
+				else if( (now_position[1] > 0) && ((mouse.photo.value[0] + mouse.photo.value[5] ) < (SEN_LF_TH +SEN_RF_TH)) &&
 						step_number[now_position[0]][now_position[1] - 1] < step_number[now_position[0]][now_position[1]] ){
 					mouse.flag.bit.enable_phot = 1;
 					mouse.end_flag = 0;
@@ -655,7 +655,7 @@ void Maze::FurukawaSearch (char x_goal,char y_goal){
 
 			else if((direction_vectle[0] == 1) && (direction_vectle[1] == 0)){
 				//右方向、未探索直進
-				if((now_position[0] < 15) && mouse.photo.value[0] < SEN_LF_TH && mouse.photo.value[5] < SEN_RF_TH &&
+				if((now_position[0] < 15) && ((mouse.photo.value[0] + mouse.photo.value[5] ) < (SEN_LF_TH +SEN_RF_TH)) &&
 						checkSearched(now_position[0] + 1, now_position[1], wall) == 0){
 					mouse.flag.bit.enable_phot = 1;
 					mouse.end_flag = 0;
@@ -679,7 +679,7 @@ void Maze::FurukawaSearch (char x_goal,char y_goal){
 					mouse.s_turn(sturn_R_90_700);
 					getNowPosition(R);
 				}
-				else if((now_position[0] < 15) && mouse.photo.value[0] < SEN_LF_TH && mouse.photo.value[5] < SEN_RF_TH &&
+				else if((now_position[0] < 15) && ((mouse.photo.value[0] + mouse.photo.value[5] ) < (SEN_LF_TH +SEN_RF_TH)) &&
 						step_number[now_position[0]+1][now_position[1]] < step_number[now_position[0]][now_position[1]] ){
 					mouse.flag.bit.enable_phot = 1;
 					mouse.end_flag = 0;
@@ -718,7 +718,7 @@ void Maze::FurukawaSearch (char x_goal,char y_goal){
 			}
 			else if((direction_vectle[0] == -1) && (direction_vectle[1] == 0)){
 				//左方向、未探索直進
-				if((now_position[0] > 0) && mouse.photo.value[0] < SEN_LF_TH && mouse.photo.value[5] < SEN_RF_TH &&
+				if((now_position[0] > 0) && ((mouse.photo.value[0] + mouse.photo.value[5] ) < (SEN_LF_TH +SEN_RF_TH)) &&
 						checkSearched(now_position[0] - 1, now_position[1], wall) == 0){
 					mouse.flag.bit.enable_phot = 1;
 					mouse.end_flag = 0;
@@ -742,7 +742,7 @@ void Maze::FurukawaSearch (char x_goal,char y_goal){
 					mouse.s_turn(sturn_R_90_700);
 					getNowPosition(R);
 				}
-				else if((now_position[0] > 0) && mouse.photo.value[0] < SEN_LF_TH && mouse.photo.value[5] < SEN_RF_TH &&
+				else if((now_position[0] > 0) && ((mouse.photo.value[0] + mouse.photo.value[5] ) < (SEN_LF_TH +SEN_RF_TH)) &&
 						step_number[now_position[0]-1][now_position[1]] < step_number[now_position[0]][now_position[1]] ){
 					mouse.flag.bit.enable_phot = 1;
 					mouse.end_flag = 0;
@@ -1974,9 +1974,9 @@ void Maze::ShortestRun(char mode, char x_goal, char y_goal, float accel, float m
 			mouse.flag.bit.diagonal = 1;
 			mouse.flag.bit.enable_phot = 0;
 			mouse.flag.bit.wallfix_SS = 0;
-			mouse.flag.bit.wallfix_S = 1;
+			mouse.flag.bit.wallfix_S = 0;
 			mouse.end_flag = 0;
-			mouse.straight(accel, mouse.velocity_th, diagVelocity, maxVelocity, 90.0 * 1.414 * path.step[i] + 20.0);
+			mouse.straight(accel, mouse.velocity_th, diagVelocity, maxVelocity, 90.0 * 1.414 * path.step[i]);
 			break;
 		case GODL45:
 			mouse.end_flag = 1;

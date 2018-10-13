@@ -10,8 +10,8 @@
 //-------------------------------------------------------------------
 //	ゴール座標
 //-------------------------------------------------------------------
-const char X_GOAL = 1;
-const char Y_GOAL = 0;
+const char X_GOAL = 7;
+const char Y_GOAL = 7;
 
 //-------------------------------------------------------------------
 //	方向シンボル
@@ -62,8 +62,8 @@ TurnParam rdturn_R_45_1000 = {9800.0, 1000.0, 45.0, 36.5, 20.0, 25.0, 45.0, R, 1
 TurnParam rdturn_L_135_1000 = {8800.0, 1000.0, 9.0, 55.0, 32.0, 103.0, 135.0, L, 1.00};
 TurnParam rdturn_R_135_1000 = {8800.0, 1000.0, 10.0, 54.0, 30.0, 105.0, 135.0, R, 1.00};
 // V90斜め
-TurnParam vturn_L_90_1000 = {11000.0, 1000.0, 6.5, 44.0, 44.5, 45.5, 90.0, L, 1.00};
-TurnParam vturn_R_90_1000 = {12000.0, 1000.0, 15.0, 37.0, 44.5, 45.5, 90.0, R, 1.00};
+TurnParam vturn_L_90_1000 = {11000.0, 1000.0, 6.5, 38.0, 44.5, 53.5, 98.0, L, 1.00};
+TurnParam vturn_R_90_1000 = {12000.0, 1000.0, 12.0, 37.0, 44.5, 50.5, 95.0, R, 1.00};
 
 TurnType turn_700 = {&sturn_L_90_700,&sturn_R_90_700,&lturn_L_90_700,&lturn_R_90_700,&lturn_L_180_700,&lturn_R_180_700,
 					&gdturn_L_45_1000,&gdturn_R_45_1000,&gdturn_L_135_1000,&gdturn_R_135_1000,
@@ -81,46 +81,46 @@ TurnType turn_1000 = {&sturn_L_90_700,&sturn_R_90_700,&lturn_L_90_1000,&lturn_R_
 //-------------------------------------------------------------------
 //	センサ閾値
 //-------------------------------------------------------------------
-const int SEN_LF_TH = 42;
-const int SEN_RF_TH = 34;
+const int SEN_LF_TH = 65;
+const int SEN_RF_TH = 56;
 const int SEN_LS_TH = 100;
 const int SEN_RS_TH = 100;
-const int SEN_LSS_TH = 100;
-const int SEN_RSS_TH = 150;
+const int SEN_LSS_TH = 82;
+const int SEN_RSS_TH = 105;
 
 const int  SEN_LSS_FIX_TH = 250;
 const int  SEN_RSS_FIX_TH = 300;
-const int  SEN_LSS_FIX_DEV = 300;
-const int  SEN_RSS_FIX_DEV = 130;
+const int  SEN_LSS_FIX_DEV = 150; // 300
+const int  SEN_RSS_FIX_DEV = 150; // 130
 const int  SEN_LS_FIX_TH = 100;
 const int  SEN_RS_FIX_TH = 130;
-const int  SEN_LS_FIX_DEV = 100;
-const int  SEN_RS_FIX_DEV = 100;
+const int  SEN_LS_FIX_DEV = 45;
+const int  SEN_RS_FIX_DEV = 80;
 
 const int SEN_LSS_DIG_TH = 1000;
 const int SEN_RSS_DIG_TH = 800;
 
-const int  SEN_LF_DEV = 100;
-const int  SEN_RF_DEV = 100;
+const int  SEN_LF_DEV = 150;
+const int  SEN_RF_DEV = 200;
 const int  SEN_LS_DEV = 100;
 const int  SEN_RS_DEV = 100;
-const int  SEN_LSS_DEV = 30;
-const int  SEN_RSS_DEV = 15;
+const int  SEN_LSS_DEV = 100;
+const int  SEN_RSS_DEV = 100;
 
 const int  SEN_LF_REF = 60;
 const int  SEN_RF_REF = 40;
 const int  SEN_LS_REF = 422;
 const int  SEN_RS_REF = 100;
-const int  SEN_LSS_REF = 750;
-const int  SEN_RSS_REF = 482;
+const int  SEN_LSS_REF = 510;
+const int  SEN_RSS_REF = 463;
 
 //-------------------------------------------------------------------
 //	壁切れ補正
 //-------------------------------------------------------------------
 const float  FIX_DISTANCE_L = 63.0;		// 左小回りの壁切れ読み
 const float  FIX_DISTANCE_R = 71.0;		// 右小回りの壁切れ読み
-const float  FIX_DISTANCE_L2 = 46.0;	// 左大回り&左行き斜めの壁切れ読み
-const float  FIX_DISTANCE_R2 = 55.0;	// 右大回り&右行き斜めの壁切れ読み
+const float  FIX_DISTANCE_L2 = 9.0;	// 左大回り&左行き斜めの壁切れ読み
+const float  FIX_DISTANCE_R2 = 3.0;		// 右大回り&右行き斜めの壁切れ読み
 const float  FIX_DISTANCE_L3 = 160.0;	// 左斜め&左帰り斜めの壁切れ読み
 const float  FIX_DISTANCE_R3 = 100.0;	// 右斜め&右帰り斜めの壁切れ読み
 
@@ -142,8 +142,8 @@ const float Kpd = 0.05;
 //-------------------------------------------------------------------
 //	機体特性
 //-------------------------------------------------------------------
-const float TIRE_R = 25.0;
-const float TIRE_L = 25.0;
+const float TIRE_R = 25.025;
+const float TIRE_L = 25.025;
 const float TORED = 72.0;
 
 

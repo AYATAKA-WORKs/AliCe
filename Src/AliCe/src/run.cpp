@@ -72,8 +72,8 @@ void Run::fixDistance(float tar_distance){
 		// 壁切れが入れられる時の位置判定(2018_10_02)
 		float dis_ref;
 		if(flag.bit.diagonal == 1) dis_ref = 180;
-		else dis_ref = 300;	// 確実に壁切れが読めるような値にすること(2018_10_02)
-		if((tar_distance - distance_th) < dis_ref && fix_flag==0 && flag.bit.straight == 1){
+		else dis_ref = 140;	// 確実に壁切れが読めるような値にすること(2018_10_02)
+		if((tar_distance - distance_th) < dis_ref && fix_flag==0 && flag.bit.straight == 1 ){
 			 fix_flag = 1;
 		}
 		if((photo.int_dev[1] > SEN_LS_FIX_DEV) && (fix_flag == 1) && (end_flag != 1)){

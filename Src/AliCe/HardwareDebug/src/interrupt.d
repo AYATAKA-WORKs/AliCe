@@ -3,8 +3,8 @@ src/interrupt.obj src/interrupt.d: C:\PROGRA~2\Renesas\RX\2_7_0\include\builtin.
 C:\PROGRA~2\Renesas\RX\2_7_0\include\builtin.h:
 src/interrupt.obj src/interrupt.d: ../src/Serial.h
 ../src/Serial.h:
-src/interrupt.obj src/interrupt.d: E:\GitLocalRepository\AliCe\Src\AliCe\generate\iodefine.h
-E:\GitLocalRepository\AliCe\Src\AliCe\generate\iodefine.h:
+src/interrupt.obj src/interrupt.d: D:\GitLocalRepository\AliCe\Src\AliCe\generate\iodefine.h
+D:\GitLocalRepository\AliCe\Src\AliCe\generate\iodefine.h:
 src/interrupt.obj src/interrupt.d: ../src/var.h
 ../src/var.h:
 src/interrupt.obj src/interrupt.d: ../src/run.h

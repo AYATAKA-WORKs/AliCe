@@ -171,7 +171,7 @@ void mode02(void){
 	mouse.gyro.calibration();
 	LED_off();
 	SpeakerEnable();
-	CSTR (CMT2) = 1;		// CMT2開始
+	CSTR (CMT2) = 0;		// CMT2開始
 	mouse.flag.bit.adati_flag = 1;
 	mouse.flag.bit.wallfix_SS = 1;
 	mouse.flag.bit.wallfix_S = 0;
@@ -180,7 +180,7 @@ void mode02(void){
 	maze.now_position[0] = 0;
 	maze.now_position[1] = 0;
 	maze.adatihou(X_GOAL,Y_GOAL);
-	CSTR (CMT2) = 1;		// CMT2開始
+	CSTR (CMT2) = 0;		// CMT2開始
 	maze.adatihou(0,0);
 	mouse.flag.bit.adati_flag = 0;
 	mouse.flag.bit.falesafe = 0;
@@ -519,13 +519,13 @@ void mode06(void){	// 調整用モード
 		mouse.gyro.initMPU();
 		mouse.gyro.calibration();
 		LED_off();
-		mouse.satartSuction();
+		//mouse.satartSuction();
 		mouse.flag.bit.enable_phot = 1;
-		mouse.end_flag = 0;
+		mouse.end_flag = 1;
 		mouse.flag.bit.wallfix_SS = 0;
 		mouse.flag.bit.wallfix_S = 0;
-		mouse.flag.bit.diagonal = 1;
-		mouse.straight(8000.0,0.0, 0.0,1000.0, 630.0 * 1.4141 + 0.0);
+		mouse.flag.bit.diagonal = 0;
+		mouse.straight(8000.0,0.0, 0.0,1000.0, 180.0f * 15.0f);
 		wait_timer(1000);
 		break;
 	case 7: // 壁切れ直線調整用
@@ -537,10 +537,51 @@ void mode06(void){	// 調整用モード
 		mouse.end_flag = 0;
 		mouse.flag.bit.wallfix_SS = 0;
 		mouse.flag.bit.wallfix_S = 1;
-		mouse.flag.bit.diagonal = 1;
-		mouse.straight(10000.0,0.0,2000.0,3000.0, 540.0 * 1.4141 + 0.0);
+		mouse.flag.bit.diagonal = 0;
+		mouse.straight(10000.0,0.0,1000.0,2000.0, 540.0 + 90.0);
+		//mouse.s_turn(lturn_L_180_1000);
+		LED01 = 1;
 		mouse.end_flag = 1;
-		mouse.straight(10000.0,2000.0,0.0,2000.0, 90.0 * 1.4141);
+		mouse.flag.bit.diagonal = 1;
+		mouse.s_turn(gdturn_R_135_1000);
+		LED01 = 0;
+		LED02 = 1;
+		mouse.end_flag = 1;
+		mouse.flag.bit.diagonal = 1;
+		mouse.s_turn(vturn_L_90_1000);
+		LED02 = 0;
+		LED03 = 1;
+		mouse.end_flag = 1;
+		mouse.flag.bit.diagonal = 1;
+		mouse.s_turn(vturn_R_90_1000);
+		LED03 = 0;
+		LED04 = 1;
+		mouse.end_flag = 1;
+		mouse.flag.bit.diagonal = 1;
+		mouse.s_turn(vturn_L_90_1000);
+		LED04 = 0;
+		LED05 = 1;
+		mouse.end_flag = 1;
+		mouse.flag.bit.diagonal = 1;
+		mouse.s_turn(vturn_R_90_1000);
+		LED05 = 0;
+		mouse.end_flag = 1;
+		mouse.flag.bit.diagonal = 1;
+		mouse.flag.bit.enable_phot = 0;
+		mouse.flag.bit.wallfix_SS = 0;
+		mouse.flag.bit.wallfix_S = 0;
+		mouse.end_flag = 0;
+		mouse.straight(10000.0, mouse.velocity_th, 1000.0, 2000.0, 90.0 * 1.414 * 2);
+		mouse.end_flag = 1;
+		mouse.flag.bit.diagonal = 1;
+		mouse.s_turn(rdturn_R_135_1000);
+		mouse.end_flag = 1;
+		mouse.flag.bit.enable_phot = 1;
+		mouse.straight(15000.0, mouse.velocity_th, 0.0, 1000.0, 90.0);
+		mouse.end_flag = 1;
+		mouse.flag.bit.enable_phot = 1;
+		//mouse.straight(10000.0,mouse.velocity_th,0.0,2000.0, 450.0);
+//		mouse.straight(10000.0,2000.0,0.0,2000.0, 90.0 * 1.4141);
 		wait_timer(1000);
 		break;
 	case 8: // その他
@@ -689,8 +730,8 @@ void mode13(void){
 	mouse.gyro.initMPU();
 	mouse.gyro.calibration();
 	LED_off();
-	SpeakerEnable();
-	CSTR (CMT2) = 1;		// CMT2開始
+	//SpeakerEnable();
+	CSTR (CMT2) = 0;		// CMT2開始
 	mouse.flag.bit.adati_flag = 1;
 	mouse.flag.bit.wallfix_SS = 1;
 	mouse.flag.bit.wallfix_S = 0;

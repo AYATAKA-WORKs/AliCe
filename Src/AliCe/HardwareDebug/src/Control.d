@@ -13,8 +13,8 @@ src/Control.obj src/Control.d: ../src/PhotoSensor.h
 ../src/PhotoSensor.h:
 src/Control.obj src/Control.d: ../src/initSetting.h
 ../src/initSetting.h:
-src/Control.obj src/Control.d: E:\GitLocalRepository\AliCe\Src\AliCe\generate\iodefine.h
-E:\GitLocalRepository\AliCe\Src\AliCe\generate\iodefine.h:
+src/Control.obj src/Control.d: D:\GitLocalRepository\AliCe\Src\AliCe\generate\iodefine.h
+D:\GitLocalRepository\AliCe\Src\AliCe\generate\iodefine.h:
 src/Control.obj src/Control.d: ../src/initNonExistentPort.h
 ../src/initNonExistentPort.h:
 src/Control.obj src/Control.d: ../src/initStopModule.h
