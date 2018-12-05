@@ -159,7 +159,7 @@ void mode01(void){
 	maze.now_position[1] = 0;
 	maze.adatihou(X_GOAL,Y_GOAL);
 	//maze.FurukawaSearch(X_GOAL,Y_GOAL);
-	//maze.adatihou(0,0);
+	maze.adatihou(0,0);
 	CSTR (CMT2) = 0;		// CMT2停止
 	//maze.FurukawaSearch(0,0);
 	mouse.flag.bit.adati_flag = 0;
@@ -233,7 +233,7 @@ void mode03(void){
 void mode04(void){
 	mode = 0;
 	mouse.flag.byte = 0x0000;
-	modeSelect(6);
+	modeSelect(8);
 	mouse.gyro.initMPU();
 	mouse.gyro.calibration();
 	LED_off();
@@ -276,10 +276,16 @@ void mode04(void){
 		maze.ShortestRun(0, X_GOAL, Y_GOAL, 10000.0, 3000.0, turn_1000, 2500.0);
 		mouse.flag.bit.falesafe = 0;
 		break;
-	case 7: // 斜め最短/大回り1000/ 斜め2500/ 直進3500
+	case 7: // 斜め最短/大回り1500/ 斜め2000/ 直進3000
 		mouse.satartSuction();
 		wait_timer(1500);
-		maze.ShortestRun(0, X_GOAL, Y_GOAL, 12000.0, 3500.0, turn_1000, 3000.0);
+		maze.ShortestRun(0, X_GOAL, Y_GOAL, 10000.0, 3000.0, turn_1500, 2000.0);
+		mouse.flag.bit.falesafe = 0;
+		break;
+	case 8: // 斜め最短/大回り1500/ 斜め2500/ 直進3000
+		mouse.satartSuction();
+		wait_timer(1500);
+		maze.ShortestRun(0, X_GOAL, Y_GOAL, 15000.0, 3000.0, turn_1500, 2500.0);
 		mouse.flag.bit.falesafe = 0;
 		break;
 	}
@@ -302,9 +308,10 @@ void mode05(void){
 }
 
 void mode06(void){	// 調整用モード
+	float _turnVelocity;
 	mode = 0;
 	mouse.flag.byte = 0x0000;
-	modeSelect(7);
+	modeSelect(8);
 	//log01.flag.bit.dps = 1;
 	//log01.flag.bit.deg = 1;
 	//log01.flag.bit.velocity = 1;
@@ -328,61 +335,89 @@ void mode06(void){	// 調整用モード
 			mouse.end_flag = 1;
 			mouse.straight(6000.0,mouse.velocity_th,0.0,700.0, 90.0);
 			break;
-		case 1:	// 90大回り1000
+		case 1:	// 90大回り
+			_turnVelocity = 1500.0f;
 			mouse.satartSuction();
+			wait_timer(500);
+			mouse.flag.bit.diagonal = 0;
+			mouse.flag.bit.enable_phot = 1;
 			mouse.end_flag = 1;
-			mouse.straight(8000.0,0.0,1000.0,1000.0, 90.0);
-			mouse.s_turn(lturn_L_90_1000);
+			mouse.straight(10000.0,0.0,_turnVelocity,_turnVelocity, 180.0);
+			mouse.s_turn(lturn_L_90_1500);
+			LED06=1;
 			mouse.end_flag = 1;
-			mouse.straight(8000.0,mouse.velocity_th,0.0,1000.0, 90.0);
+			mouse.straight(10000.0,mouse.velocity_th,0.0,_turnVelocity, 180.0);
 			break;
-		case 2:	// 180大回り1000
+		case 2:	// 180大回り
+			_turnVelocity = 1500.0f;
 			mouse.satartSuction();
+			wait_timer(500);
+			mouse.flag.bit.diagonal = 0;
 			mouse.end_flag = 1;
-			mouse.straight(8000.0,0.0,1000.0,1000.0, 90.0);
-			mouse.s_turn(lturn_L_180_1000);
+			mouse.straight(10000.0,0.0,_turnVelocity,_turnVelocity, 180.0);
+			mouse.s_turn(lturn_L_180_1500);
+			LED06=1;
 			mouse.end_flag = 1;
-			mouse.straight(8000.0,mouse.velocity_th,0.0,1000.0, 90.0);
+			mouse.straight(10000.0,mouse.velocity_th,0.0,_turnVelocity, 180.0);
 			break;
-		case 3:	// 45行き斜め1000
+		case 3:	// 45行き斜め
+			_turnVelocity = 1000.0f;
 			mouse.satartSuction();
+			wait_timer(500);
+			mouse.flag.bit.diagonal = 0;
+			mouse.flag.bit.enable_phot = 1;
 			mouse.end_flag = 1;
-			mouse.straight(8000.0,0.0,1000.0,1000.0, 90.0);
+			mouse.straight(10000.0,0.0,_turnVelocity,_turnVelocity, 180.0);
 			mouse.s_turn(gdturn_L_45_1000);
+			LED06=1;
 			mouse.end_flag = 1;
-			mouse.straight(8000.0,mouse.velocity_th,0.0,1000.0, 90.0 * 1.414);
+			mouse.straight(10000.0,mouse.velocity_th,0.0,_turnVelocity, 90.0*2.0 * 1.414);
 			break;
-		case 4:	// 135行き斜め1000
+		case 4:	// 135行き斜め
+			_turnVelocity = 1000.0f;
 			mouse.satartSuction();
+			wait_timer(500);
+			mouse.flag.bit.diagonal = 0;
+			mouse.flag.bit.enable_phot = 1;
 			mouse.end_flag = 1;
-			mouse.straight(8000.0,0.0,1000.0,1000.0, 90.0);
+			mouse.straight(10000.0,0.0,_turnVelocity,_turnVelocity, 180.0);
 			mouse.s_turn(gdturn_L_135_1000);
+			LED06=1;
 			mouse.end_flag = 1;
-			mouse.straight(8000.0,mouse.velocity_th,0.0,1000.0, 90.0 * 1.414);
+			mouse.straight(10000.0,mouse.velocity_th,0.0,_turnVelocity, 90.0*2.0 * 1.414);
 			break;
-		case 5:	// 45帰り斜め1000
+		case 5:	// 45帰り斜め
+			_turnVelocity = 1500.0f;
 			mouse.satartSuction();
+			wait_timer(500);
 			mouse.end_flag = 1;
-			mouse.straight(8000.0,0.0,1000.0,1000.0, 90.0 * 1.414);
-			mouse.s_turn(rdturn_L_45_1000);
+			mouse.straight(10000.0,0.0,_turnVelocity,_turnVelocity, 90.0*2.0 * 1.414);
+			mouse.s_turn(rdturn_L_45_1500);
+			LED06=1;
 			mouse.end_flag = 1;
-			mouse.straight(8000.0,mouse.velocity_th,0.0,1000.0, 90.0);
+			mouse.straight(10000.0,mouse.velocity_th,0.0,_turnVelocity, 180.0);
 			break;
-		case 6:	// 135帰り斜め1000
+		case 6:	// 135帰り斜め
+			_turnVelocity = 1500.0f;
 			mouse.satartSuction();
+			wait_timer(500);
 			mouse.end_flag = 1;
-			mouse.straight(8000.0,0.0,1000.0,1000.0, 90.0 * 1.414);
-			mouse.s_turn(rdturn_L_135_1000);
+			mouse.straight(10000.0,0.0,_turnVelocity,_turnVelocity, 90.0*2.0 * 1.414);
+			mouse.s_turn(rdturn_L_135_1500);
+			LED06=1;
 			mouse.end_flag = 1;
-			mouse.straight(8000.0,mouse.velocity_th,0.0,1000.0, 90.0);
+			mouse.straight(10000.0,mouse.velocity_th,0.0,_turnVelocity, 180.0);
 			break;
-		case 7:	// V90斜め1000
+		case 7:	// V90斜め
+			_turnVelocity = 1000.0f;
 			mouse.satartSuction();
+			wait_timer(500);
 			mouse.end_flag = 1;
-			mouse.straight(8000.0,0.0,1000.0,1000.0, 90.0 * 1.414);
+			mouse.straight(10000.0,0.0,_turnVelocity,_turnVelocity, 90.0 * 2.0 * 1.414);
 			mouse.s_turn(vturn_L_90_1000);
+			LED06=1;
 			mouse.end_flag = 1;
-			mouse.straight(8000.0,mouse.velocity_th,0.0,1000.0, 90.0 * 1.414);
+			mouse.straight(10000.0,mouse.velocity_th,0.0,_turnVelocity, 90.0 * 2.0 * 1.414);
 			break;
 		default:
 			break;
@@ -407,61 +442,94 @@ void mode06(void){	// 調整用モード
 			mouse.end_flag = 1;
 			mouse.straight(6000.0,mouse.velocity_th,0.0,700.0, 90.0);
 			break;
-		case 1:	// 90大回り1000
+		case 1:	// 90大回り
+			_turnVelocity = 1500.0f;
 			mouse.satartSuction();
+			wait_timer(500);
+			mouse.flag.bit.diagonal = 0;
+			mouse.flag.bit.enable_phot = 1;
 			mouse.end_flag = 1;
-			mouse.straight(8000.0,0.0,1000.0,1000.0, 90.0);
-			mouse.s_turn(lturn_R_90_1000);
+			mouse.straight(10000.0,0.0,_turnVelocity,_turnVelocity, 180.0);
+			mouse.s_turn(lturn_R_90_1500);
+			LED06=1;
 			mouse.end_flag = 1;
-			mouse.straight(8000.0,mouse.velocity_th,0.0,1000.0, 90.0);
+			mouse.straight(10000.0,mouse.velocity_th,0.0,_turnVelocity, 180.0);
 			break;
-		case 2:	// 180大回り1000
+		case 2:	// 180大回り
+			_turnVelocity = 1500.0f;
 			mouse.satartSuction();
+			wait_timer(500);
+			mouse.flag.bit.diagonal = 0;
+			mouse.flag.bit.enable_phot = 1;
 			mouse.end_flag = 1;
-			mouse.straight(8000.0,0.0,1000.0,1000.0, 90.0);
-			mouse.s_turn(lturn_R_180_1000);
+			mouse.straight(10000.0,0.0,_turnVelocity,_turnVelocity, 180.0);
+			mouse.s_turn(lturn_R_180_1500);
+			LED06=1;
 			mouse.end_flag = 1;
-			mouse.straight(8000.0,mouse.velocity_th,0.0,1000.0, 90.0);
+			mouse.straight(10000.0,mouse.velocity_th,0.0,_turnVelocity, 180.0);
 			break;
-		case 3:	// 45行き斜め1000
+		case 3:	// 45行き斜め
+			_turnVelocity = 1000.0f;
 			mouse.satartSuction();
+			wait_timer(500);
+			mouse.flag.bit.diagonal = 0;
+			mouse.flag.bit.enable_phot = 1;
 			mouse.end_flag = 1;
-			mouse.straight(8000.0,0.0,1000.0,1000.0, 90.0);
+			mouse.straight(10000.0,0.0,_turnVelocity,_turnVelocity, 180.0);
 			mouse.s_turn(gdturn_R_45_1000);
+			LED06=1;
 			mouse.end_flag = 1;
-			mouse.straight(8000.0,mouse.velocity_th,0.0,1000.0, 90.0 * 1.414);
+			mouse.straight(10000.0,mouse.velocity_th,0.0,_turnVelocity, 90.0*2.0 * 1.414);
 			break;
-		case 4:	// 135行き斜め1000
+		case 4:	// 135行き斜め
+			_turnVelocity = 1000.0f;
 			mouse.satartSuction();
+			wait_timer(500);
+			mouse.flag.bit.diagonal = 0;
+			mouse.flag.bit.enable_phot = 1;
 			mouse.end_flag = 1;
-			mouse.straight(8000.0,0.0,1000.0,1000.0, 90.0);
+			mouse.straight(10000.0,0.0,_turnVelocity,_turnVelocity, 180.0);
 			mouse.s_turn(gdturn_R_135_1000);
+			LED06=1;
 			mouse.end_flag = 1;
-			mouse.straight(8000.0,mouse.velocity_th,0.0,1000.0, 90.0 * 1.414);
+			mouse.straight(10000.0,mouse.velocity_th,0.0,_turnVelocity, 90.0*2.0 * 1.414);
 			break;
-		case 5:	// 45帰り斜め1000
+		case 5:	// 45帰り斜め
+			_turnVelocity = 1500.0f;
 			mouse.satartSuction();
+			wait_timer(500);
 			mouse.end_flag = 1;
-			mouse.straight(8000.0,0.0,1000.0,1000.0, 90.0 * 1.414);
-			mouse.s_turn(rdturn_R_45_1000);
+			mouse.straight(10000.0,0.0,_turnVelocity,_turnVelocity, 90.0*2.0 * 1.414);
+			mouse.s_turn(rdturn_R_45_1500);
+			LED06=1;
 			mouse.end_flag = 1;
-			mouse.straight(8000.0,mouse.velocity_th,0.0,1000.0, 90.0);
+			mouse.straight(10000.0,mouse.velocity_th,0.0,_turnVelocity, 180.0);
 			break;
-		case 6:	// 135帰り斜め1000
+		case 6:	// 135帰り斜め
+			_turnVelocity = 1500.0f;
 			mouse.satartSuction();
+			wait_timer(500);
 			mouse.end_flag = 1;
-			mouse.straight(8000.0,0.0,1000.0,1000.0, 90.0 * 1.414);
-			mouse.s_turn(rdturn_R_135_1000);
+			mouse.straight(10000.0,0.0,_turnVelocity,_turnVelocity, 90.0*2.0 * 1.414);
+			mouse.s_turn(rdturn_R_135_1500);
+			LED06=1;
 			mouse.end_flag = 1;
-			mouse.straight(8000.0,mouse.velocity_th,0.0,1000.0, 90.0);
+			mouse.straight(10000.0,mouse.velocity_th,0.0,_turnVelocity, 180.0);
 			break;
-		case 7:	// V90斜め1000
+		case 7:	// V90斜め
+			_turnVelocity = 1000;
+			log01.flag.bit.dps = 1;
 			mouse.satartSuction();
+			wait_timer(500);
 			mouse.end_flag = 1;
-			mouse.straight(8000.0,0.0,1000.0,1000.0, 90.0 * 1.414);
+			mouse.straight(10000.0,0.0,_turnVelocity,_turnVelocity, 90.0 * 2.0 * 1.414);
+			mouse.flag.bit.enable_phot = 0;
 			mouse.s_turn(vturn_R_90_1000);
+			LED06=1;
 			mouse.end_flag = 1;
-			mouse.straight(8000.0,mouse.velocity_th,0.0,1000.0, 90.0 * 1.414);
+			mouse.flag.bit.enable_phot = 0;
+			mouse.straight(10000.0,mouse.velocity_th,0.0,_turnVelocity, 90.0 * 2.0 * 1.414);
+			LED06=0;
 			break;
 		default:
 			break;
@@ -471,10 +539,10 @@ void mode06(void){	// 調整用モード
 		mouse.gyro.initMPU();
 		mouse.gyro.calibration();
 		LED_off();
-		for(int i=0; i<1; i++){
+		for(int i=0; i<4; i++){
 			wait_timer(500);
 			mouse.flag.bit.enable_phot = 0;
-			mouse.turn(500.0, 360.0, L); // 左超信知旋回
+			mouse.turn(500.0, 180.5, L); // 左超信知旋回
 		}
 		break;
 	case 3:
@@ -525,66 +593,72 @@ void mode06(void){	// 調整用モード
 		mouse.flag.bit.wallfix_SS = 0;
 		mouse.flag.bit.wallfix_S = 0;
 		mouse.flag.bit.diagonal = 0;
-		mouse.straight(8000.0,0.0, 0.0,1000.0, 180.0f * 15.0f);
+		mouse.straight(8000.0,0.0, 0.0,500.0, 180.0f * 2.0f);
 		wait_timer(1000);
 		break;
-	case 7: // 壁切れ直線調整用
+	case 7: // 大回り左壁切れ直線調整用
 		mouse.gyro.initMPU();
 		mouse.gyro.calibration();
 		LED_off();
 		mouse.satartSuction();
+		wait_timer(500);
 		mouse.flag.bit.enable_phot = 1;
 		mouse.end_flag = 0;
 		mouse.flag.bit.wallfix_SS = 0;
 		mouse.flag.bit.wallfix_S = 1;
 		mouse.flag.bit.diagonal = 0;
-		mouse.straight(10000.0,0.0,1000.0,2000.0, 540.0 + 90.0);
-		//mouse.s_turn(lturn_L_180_1000);
-		LED01 = 1;
+		mouse.straight(10000.0,0.0,1500.0,2000.0, 360.0 + 90.0);
+		mouse.s_turn(lturn_L_180_1500);
+		mouse.flag.bit.enable_phot = 1;
 		mouse.end_flag = 1;
-		mouse.flag.bit.diagonal = 1;
-		mouse.s_turn(gdturn_R_135_1000);
-		LED01 = 0;
-		LED02 = 1;
-		mouse.end_flag = 1;
-		mouse.flag.bit.diagonal = 1;
-		mouse.s_turn(vturn_L_90_1000);
-		LED02 = 0;
-		LED03 = 1;
-		mouse.end_flag = 1;
-		mouse.flag.bit.diagonal = 1;
-		mouse.s_turn(vturn_R_90_1000);
-		LED03 = 0;
-		LED04 = 1;
-		mouse.end_flag = 1;
-		mouse.flag.bit.diagonal = 1;
-		mouse.s_turn(vturn_L_90_1000);
-		LED04 = 0;
-		LED05 = 1;
-		mouse.end_flag = 1;
-		mouse.flag.bit.diagonal = 1;
-		mouse.s_turn(vturn_R_90_1000);
-		LED05 = 0;
-		mouse.end_flag = 1;
-		mouse.flag.bit.diagonal = 1;
-		mouse.flag.bit.enable_phot = 0;
 		mouse.flag.bit.wallfix_SS = 0;
 		mouse.flag.bit.wallfix_S = 0;
+		mouse.flag.bit.diagonal = 0;
+		mouse.straight(10000.0, mouse.velocity_th, 0.0, 2000.0, 360.0);
+		wait_timer(500);
+		break;
+	case 8: // 大回り右壁切れ直線調整用
+		mouse.gyro.initMPU();
+		mouse.gyro.calibration();
+		LED_off();
+		mouse.satartSuction();
+		wait_timer(500);
+		mouse.flag.bit.enable_phot = 1;
 		mouse.end_flag = 0;
-		mouse.straight(10000.0, mouse.velocity_th, 1000.0, 2000.0, 90.0 * 1.414 * 2);
-		mouse.end_flag = 1;
-		mouse.flag.bit.diagonal = 1;
-		mouse.s_turn(rdturn_R_135_1000);
-		mouse.end_flag = 1;
+		mouse.flag.bit.wallfix_SS = 0;
+		mouse.flag.bit.wallfix_S = 1;
+		mouse.flag.bit.diagonal = 0;
+		mouse.straight(10000.0,0.0,1500.0,2000.0, 360.0 + 90.0);
+		mouse.s_turn(lturn_R_180_1500);
 		mouse.flag.bit.enable_phot = 1;
-		mouse.straight(15000.0, mouse.velocity_th, 0.0, 1000.0, 90.0);
 		mouse.end_flag = 1;
+		mouse.flag.bit.wallfix_SS = 0;
+		mouse.flag.bit.wallfix_S = 0;
+		mouse.flag.bit.diagonal = 0;
+		mouse.straight(10000.0, mouse.velocity_th, 0.0, 2000.0, 360.0);
+		wait_timer(500);
+		break;
+	case 9: // 小回り壁切れ直線調整用
+		mouse.gyro.initMPU();
+		mouse.gyro.calibration();
+		LED_off();
+//		mouse.satartSuction();
 		mouse.flag.bit.enable_phot = 1;
-		//mouse.straight(10000.0,mouse.velocity_th,0.0,2000.0, 450.0);
-//		mouse.straight(10000.0,2000.0,0.0,2000.0, 90.0 * 1.4141);
+		mouse.flag.bit.adati_flag = 1;
+		mouse.end_flag = 0;
+		mouse.flag.bit.wallfix_SS = 1;
+		mouse.flag.bit.wallfix_S = 0;
+		mouse.flag.bit.diagonal = 0;
+		mouse.straight(10000.0,0.0,700.0,700.0, 360.0);
+		mouse.flag.bit.enable_phot = 1;
+		mouse.end_flag = 1;
+		mouse.flag.bit.wallfix_SS = 0;
+		mouse.flag.bit.wallfix_S = 0;
+		mouse.flag.bit.diagonal = 0;
+		mouse.straight(10000.0, mouse.velocity_th, 0.0, 700.0, 90.0);
 		wait_timer(1000);
 		break;
-	case 8: // その他
+	case 10: // その他
 		mouse.gyro.initMPU();
 		mouse.gyro.calibration();
 		LED_off();
@@ -630,7 +704,7 @@ void mode06(void){	// 調整用モード
 
 void mode07(void){	// ログモード
 	mode = 0;
-	modeSelect(3);
+	modeSelect(4);
 	mouse.gyro.initMPU();
 	mouse.gyro.calibration();
 	LED_off();
@@ -652,13 +726,19 @@ void mode07(void){	// ログモード
 		log01.flag.bit.photo_F = 0;
 		break;
 	case 2: // 斜壁センサ値取得
-		mouse.flag.bit.enable_phot = 0;
+		mouse.flag.bit.enable_phot = 1;
 		mouse.end_flag = 1;
 		log01.flag.bit.photo_S = 1;
 		mouse.straight(7000.0,0.0,0.0,700.0, 180.0 * 3.0);
 		log01.flag.bit.photo_S = 0;
 		break;
-	case 3:	// ログ表示
+	case 3:	// 横壁センサ値取得
+		mouse.flag.bit.enable_phot = 1;
+		log01.flag.bit.photo_SS = 1;
+		wait_timer(1000);
+		log01.flag.bit.photo_SS = 0;
+		break;
+	case 4:	// ログ表示
 		mouse.motor_l.disable();		// left motor on
 		mouse.motor_r.disable();		// right motor on
 		for(int i=0; i<log01.num2; i++){

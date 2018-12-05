@@ -65,6 +65,8 @@ extern TurnParam sturn_L_90_800;
 extern TurnParam sturn_R_90_800;
 extern TurnParam sturn_L_90_1000;
 extern TurnParam sturn_R_90_1000;
+extern TurnParam sturn_L_90_1500;
+extern TurnParam sturn_R_90_1500;
 
 // 大回り90
 extern TurnParam lturn_L_90_500;
@@ -75,6 +77,8 @@ extern TurnParam lturn_L_90_800;
 extern TurnParam lturn_R_90_800;
 extern TurnParam lturn_L_90_1000;
 extern TurnParam lturn_R_90_1000;
+extern TurnParam lturn_L_90_1500;
+extern TurnParam lturn_R_90_1500;
 
 // 大回り180
 extern TurnParam lturn_L_180_700;
@@ -83,30 +87,43 @@ extern TurnParam lturn_L_180_800;
 extern TurnParam lturn_R_180_800;
 extern TurnParam lturn_L_180_1000;
 extern TurnParam lturn_R_180_1000;
+extern TurnParam lturn_L_180_1500;
+extern TurnParam lturn_R_180_1500;
 
 // 行き斜め45
 extern TurnParam gdturn_L_45_1000;
 extern TurnParam gdturn_R_45_1000;
+extern TurnParam gdturn_L_45_1500;
+extern TurnParam gdturn_R_45_1500;
 
 // 行き斜め135
 extern TurnParam gdturn_L_135_1000;
 extern TurnParam gdturn_R_135_1000;
+extern TurnParam gdturn_L_135_1500;
+extern TurnParam gdturn_R_135_1500;
 
 // 帰り斜め45
 extern TurnParam rdturn_L_45_1000;
 extern TurnParam rdturn_R_45_1000;
+extern TurnParam rdturn_L_45_1500;
+extern TurnParam rdturn_R_45_1500;
 
 // 帰り斜め135
 extern TurnParam rdturn_L_135_1000;
 extern TurnParam rdturn_R_135_1000;
+extern TurnParam rdturn_L_135_1500;
+extern TurnParam rdturn_R_135_1500;
 
 // V90斜め
 extern TurnParam vturn_L_90_1000;
 extern TurnParam vturn_R_90_1000;
+extern TurnParam vturn_L_90_1500;
+extern TurnParam vturn_R_90_1500;
 
 extern TurnType turn_700;
 extern TurnType turn_800;
 extern TurnType turn_1000;
+extern TurnType turn_1500;
 
 //-------------------------------------------------------------------
 //	センサ閾値

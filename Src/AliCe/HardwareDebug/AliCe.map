@@ -1,4 +1,4 @@
-Renesas Optimizing Linker (W2.07.00 )             12-Oct-2018 19:25:02
+Renesas Optimizing Linker (W2.07.00 )             03-Dec-2018 10:51:09
 
 *** Options ***
 
@@ -57,7 +57,7 @@ R_2
 B
                                   000043c0  00008907      4548   4
 R
-                                  00008908  000090cb       7c4   4
+                                  00008908  0000934b       a44   4
 PResetPRG
                                   fff80000  fff80030        31   1
 C_1
@@ -77,22 +77,22 @@ C$VECT
 C$VTBL
                                   fff80878  fff80878         0   1
 D
-                                  fff80878  fff8103b       7c4   4
+                                  fff80878  fff812bb       a44   4
 D_1
-                                  fff8103c  fff8108f        54   1
+                                  fff812bc  fff8130f        54   1
 D_2
-                                  fff81090  fff81090         0   1
+                                  fff81310  fff81310         0   1
 W
-                                  fff81090  fff81090         0   4
+                                  fff81310  fff81310         0   4
 W_1
-                                  fff81090  fff81090         0   1
+                                  fff81310  fff81310         0   1
 W_2
-                                  fff81090  fff81149        ba   2
+                                  fff81310  fff813cd        be   2
 L
-                                  fff8114c  fff813cc       281   4
+                                  fff813d0  fff81650       281   4
 PIntPRG
-                                  fff813cd  fff815a6       1da   1
+                                  fff81651  fff8182a       1da   1
 P
-                                  fff815a7  fff9deb2     1c90c   1
+                                  fff8182b  fff9e3cc     1cba2   1
 FIXEDVECT
                                   ffffff80  ffffffff        80   4

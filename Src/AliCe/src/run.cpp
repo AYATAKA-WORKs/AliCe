@@ -171,7 +171,11 @@ void Run::Slalom(float _deg_a, float _velocity, float offset_u,float offset_d,fl
 	}
 	deg_a = 0.0;
 	deg_v = 0.0;
-	flag.bit.diagonal = 0;
+	// 斜めからの復帰ターンのオフセット走行に壁制御をかけるための処理
+	if((tar_deg < 80.0f && tar_deg > 100.0f) && flag.bit.diagonal == 1){
+		flag.bit.diagonal = 0;
+	}
+	//flag.bit.diagonal = 0;
 	distance_th = 0.0;
 }
 

@@ -1,0 +1,1013 @@
+/***********************************************************************/
+/*                                                                     */
+/*  FILE        : Main.cpp                                   */
+/*  DATE        :Tue, Oct 31, 2006                                     */
+/*  DESCRIPTION :Main Program                                          */
+/*  CPU TYPE    :                                                      */
+/*                                                                     */
+/*  NOTE:THIS IS A TYPICAL EXAMPLE.                                    */
+/*                                                                     */
+/***********************************************************************/
+//#include "typedefine.h"
+#include "iodefine.h"
+#include <iostream>
+#include <stdint.h>
+#include <math.h>
+
+#include "initSetting.h"
+#include "interrupt.h"
+#include "Serial.h"
+#include "var.h"
+#include "speaker_func.h"
+#include "PhotoSensor.h"
+#include "Maze.h"
+#include "parameter.h"
+
+void main(void);
+#ifdef __cplusplus
+extern "C" {
+void abort(void);
+}
+#endif
+
+int mode;
+
+void LED_off(void);
+void LED_on(void);
+void checkBattery(void);
+void getLog(char mode);
+void modeSelect(char num);
+
+void mode00(void);
+void mode01(void);
+void mode02(void);
+void mode03(void);
+void mode04(void);
+void mode05(void);
+void mode06(void);
+void mode07(void);
+void mode08(void);
+void mode09(void);
+void mode10(void);
+void mode11(void);
+void mode12(void);
+void mode13(void);
+void mode14(void);
+void mode15(void);
+
+//-------------------------------------------------------------------
+//	主処理
+//-------------------------------------------------------------------
+
+void main(void) {
+
+	initSetting::initModules(); // 各モジュールの初期化
+	mouse.flag.byte = 0x0;	// フラグ初期化
+	CSTR (CMT0) = 1;		// CMT0開始
+	CSTR (CMT1) = 1;		// CMT1開始
+	CSTR (CMT2) = 0;		// CMT2開始
+
+	checkBattery();				// 電圧監視
+
+	//StartUpSound(350, 2);
+	SpeakerDisable();
+	LED_off();
+
+	mouse.setParameter();
+	mouse.gyro.initMPU();
+	maze.initMap(X_GOAL,Y_GOAL);
+
+	while (1) {
+		mouse.initValue();
+		mouse.flag.bit.falesafe = 0;
+		modeSelect(15);
+		switch(mode){
+		case 0:
+			mode00();
+			break;
+		case 1:
+			mode01();	// 足立法or左手法
+			break;
+		case 2:
+			mode02();	// 最短走行
+			break;
+		case 3:
+			mode03();	// 左スラローム調整
+			break;
+		case 4:
+			mode04();	// 右スラローム調整
+			break;
+		case 5:
+			mode05();	// 左超信地旋回調整
+			break;
+		case 6:
+			mode06();	// 壁制御調整
+			break;
+		case 7:
+			mode07();	// ログ取得
+			break;
+		case 8:
+			mode08();	// マップデータ表示
+			break;
+		case 9:
+			mode09();	// センサ値表示
+			break;
+		case 10:
+			mode10();
+			break;
+		case 11:
+			mode11();	// 宴会芸
+			break;
+		case 12:
+			mode12();
+			break;
+		case 13:
+			mode13();
+			break;
+		case 14:
+			mode14();
+			break;
+		case 15:
+			mode15();
+			break;
+		}
+		mode = 0;
+	}
+}
+
+//-------------------------------------------------------------------
+//	モード別処理
+//-------------------------------------------------------------------
+
+void mode00(void){
+	myprintf("%f\r\n",abs(mouse.ve_s_error_l) + abs(mouse.ve_s_error_r));
+}
+
+void mode01(void){
+	mouse.gyro.initMPU();
+	mouse.gyro.calibration();
+	LED_off();
+	SpeakerEnable();
+	CSTR (CMT2) = 0;		// CMT2停止
+	mouse.flag.bit.adati_flag = 1;
+	mouse.flag.bit.wallfix_SS = 1;
+	mouse.flag.bit.wallfix_S = 0;
+	mouse.flag.bit.wall_fix = 1;
+	maze.direction_vectle[0] = 0;
+	maze.direction_vectle[1] = 1;
+	maze.now_position[0] = 0;
+	maze.now_position[1] = 0;
+	maze.adatihou(X_GOAL,Y_GOAL);
+	//maze.FurukawaSearch(X_GOAL,Y_GOAL);
+	//maze.adatihou(0,0);
+	CSTR (CMT2) = 0;		// CMT2停止
+	//maze.FurukawaSearch(0,0);
+	mouse.flag.bit.adati_flag = 0;
+	mouse.flag.bit.falesafe = 0;
+}
+
+void mode02(void){
+	mouse.gyro.initMPU();
+	mouse.gyro.calibration();
+	LED_off();
+	SpeakerEnable();
+	CSTR (CMT2) = 0;		// CMT2開始
+	mouse.flag.bit.adati_flag = 1;
+	mouse.flag.bit.wallfix_SS = 1;
+	mouse.flag.bit.wallfix_S = 0;
+	maze.direction_vectle[0] = 0;
+	maze.direction_vectle[1] = 1;
+	maze.now_position[0] = 0;
+	maze.now_position[1] = 0;
+	maze.adatihou(X_GOAL,Y_GOAL);
+	CSTR (CMT2) = 0;		// CMT2開始
+	maze.adatihou(0,0);
+	mouse.flag.bit.adati_flag = 0;
+	mouse.flag.bit.falesafe = 0;
+}
+
+void mode03(void){
+	mode = 0;
+	mouse.flag.byte = 0x0000;
+	modeSelect(5);
+	mouse.gyro.initMPU();
+	mouse.gyro.calibration();
+	LED_off();
+	switch(mode){
+	case 0:	//ダミー
+		break;
+	case 1: // 大回り最短700/ 直進2000
+		maze.ShortestRun(1, X_GOAL, Y_GOAL, 10000.0, 2000.0, turn_700, 1000.0);
+		mouse.flag.bit.falesafe = 0;
+		break;
+	case 2:	// 大回り最短700/ 直進2500
+		maze.ShortestRun(1, X_GOAL, Y_GOAL, 10000.0, 2500.0, turn_700, 1000.0);
+		mouse.flag.bit.falesafe = 0;
+		break;
+	case 3:	// 大回り最短700/ 直進3000
+		maze.ShortestRun(1, X_GOAL, Y_GOAL, 10000.0, 3000.0, turn_700, 1000.0);
+		mouse.flag.bit.falesafe = 0;
+		break;
+	case 4:	// 大回り最短1000/ 直進2500
+		mouse.satartSuction();
+		wait_timer(1500);
+		maze.ShortestRun(1, X_GOAL, Y_GOAL, 10000.0, 2500.0, turn_1000, 1000.0);
+		mouse.flag.bit.falesafe = 0;
+		break;
+	case 5: // 大回り最短1000/ 直進3000
+		mouse.satartSuction();
+		wait_timer(1500);
+		maze.ShortestRun(1, X_GOAL, Y_GOAL, 10000.0, 3000.0, turn_1000, 1000.0);
+		mouse.flag.bit.falesafe = 0;
+		break;
+	case 6: // 大回り最短1000/ 直進3500
+		mouse.satartSuction();
+		wait_timer(1500);
+		maze.ShortestRun(1, X_GOAL, Y_GOAL, 10000.0, 3500.0, turn_1000, 1000.0);
+		mouse.flag.bit.falesafe = 0;
+		break;
+	}
+	mode = 0;
+}
+
+void mode04(void){
+	mode = 0;
+	mouse.flag.byte = 0x0000;
+	modeSelect(6);
+	mouse.gyro.initMPU();
+	mouse.gyro.calibration();
+	LED_off();
+	switch(mode){
+	case 0:	//ダミー
+		break;
+	case 1:	// 斜め最短/大回り1000/ 斜め1000/ 直進2000
+		mouse.satartSuction();
+		wait_timer(1500);
+		maze.ShortestRun(0, X_GOAL, Y_GOAL, 10000.0, 2000.0, turn_1000, 1000.0);
+		mouse.flag.bit.falesafe = 0;
+		break;
+	case 2:	// 斜め最短/大回り1000/ 斜め1000/ 直進2500
+		mouse.satartSuction();
+		wait_timer(1500);
+		maze.ShortestRun(0, X_GOAL, Y_GOAL, 10000.0, 2500.0, turn_1000, 1000.0);
+		mouse.flag.bit.falesafe = 0;
+		break;
+	case 3: // 斜め最短/大回り1000/ 斜め1000/ 直進3000
+		mouse.satartSuction();
+		wait_timer(1500);
+		maze.ShortestRun(0, X_GOAL, Y_GOAL, 10000.0, 3000.0, turn_1000, 1000.0);
+		mouse.flag.bit.falesafe = 0;
+		break;
+	case 4: // 斜め最短/大回り1000/ 斜め1500/ 直進3000
+		mouse.satartSuction();
+		wait_timer(1500);
+		maze.ShortestRun(0, X_GOAL, Y_GOAL, 10000.0, 3000.0, turn_1000, 1500.0);
+		mouse.flag.bit.falesafe = 0;
+		break;
+	case 5: // 斜め最短/大回り1000/ 斜め2000/ 直進3000
+		mouse.satartSuction();
+		wait_timer(1500);
+		maze.ShortestRun(0, X_GOAL, Y_GOAL, 10000.0, 3000.0, turn_1000, 2000.0);
+		mouse.flag.bit.falesafe = 0;
+		break;
+	case 6: // 斜め最短/大回り1000/ 斜め2500/ 直進3000
+		mouse.satartSuction();
+		wait_timer(1500);
+		maze.ShortestRun(0, X_GOAL, Y_GOAL, 10000.0, 3000.0, turn_1000, 2500.0);
+		mouse.flag.bit.falesafe = 0;
+		break;
+	case 7: // 斜め最短/大回り1500/ 斜め2000/ 直進3000
+		mouse.satartSuction();
+		wait_timer(1500);
+		maze.ShortestRun(0, X_GOAL, Y_GOAL, 10000.0, 3000.0, turn_1500, 2000.0);
+		mouse.flag.bit.falesafe = 0;
+		break;
+	case 8: // 斜め最短/大回り1500/ 斜め2500/ 直進3000
+		mouse.satartSuction();
+		wait_timer(1500);
+		maze.ShortestRun(0, X_GOAL, Y_GOAL, 15000.0, 3000.0, turn_1500, 2500.0);
+		mouse.flag.bit.falesafe = 0;
+		break;
+	}
+	mode = 0;
+}
+
+void mode05(void){
+	mouse.gyro.initMPU();
+	mouse.gyro.calibration();
+	LED_off();
+	maze.getPath(X_GOAL,Y_GOAL);
+	myprintf("%d\r\n",maze.path.num);
+	for(int i=0;i<=maze.path.num;i++){
+		myprintf("%d %d\r\n",maze.path.type[i],maze.path.step[i]);
+	}
+	maze.runPath(0,3000.0,turn_700);
+	SpeakerEnable();
+	KirbyDance(180, 2);
+	SpeakerDisable();
+}
+
+void mode06(void){	// 調整用モード
+	float _turnVelocity;
+	mode = 0;
+	mouse.flag.byte = 0x0000;
+	modeSelect(7);
+	//log01.flag.bit.dps = 1;
+	//log01.flag.bit.deg = 1;
+	//log01.flag.bit.velocity = 1;
+	//mouse.satartSuction();
+	switch(mode){
+	case 0:	// 左ターン調整用
+		mode = 0;
+		modeSelect(6);
+		mouse.flag.bit.enable_phot = 0;
+		mouse.velocity_th = 0.0;
+		mouse.flag.bit.diagonal = 1;
+		mouse.gyro.initMPU();
+		mouse.gyro.calibration();
+		LED_off();
+		wait_timer(500);
+		switch(mode){
+		case 0:	// 90小回700
+			mouse.end_flag = 1;
+			mouse.straight(6000.0,0.0,700.0,700.0, 90.0);
+			mouse.s_turn(sturn_L_90_700);
+			mouse.end_flag = 1;
+			mouse.straight(6000.0,mouse.velocity_th,0.0,700.0, 90.0);
+			break;
+		case 1:	// 90大回り
+			_turnVelocity = 1500.0f;
+			mouse.satartSuction();
+			wait_timer(500);
+			mouse.end_flag = 1;
+			mouse.straight(10000.0,0.0,_turnVelocity,_turnVelocity, 180.0);
+			mouse.s_turn(lturn_L_90_1500);
+			LED06=1;
+			mouse.end_flag = 1;
+			mouse.straight(10000.0,mouse.velocity_th,0.0,_turnVelocity, 180.0);
+			break;
+		case 2:	// 180大回り
+			_turnVelocity = 1500.0f;
+			mouse.satartSuction();
+			wait_timer(500);
+			mouse.end_flag = 1;
+			mouse.straight(10000.0,0.0,_turnVelocity,_turnVelocity, 180.0);
+			mouse.s_turn(lturn_L_180_1500);
+			LED06=1;
+			mouse.end_flag = 1;
+			mouse.straight(10000.0,mouse.velocity_th,0.0,_turnVelocity, 180.0);
+			break;
+		case 3:	// 45行き斜め
+			_turnVelocity = 1500.0f;
+			mouse.satartSuction();
+			wait_timer(500);
+			mouse.end_flag = 1;
+			mouse.straight(10000.0,0.0,_turnVelocity,_turnVelocity, 180.0);
+			mouse.s_turn(gdturn_L_45_1500);
+			LED06=1;
+			mouse.end_flag = 1;
+			mouse.straight(10000.0,mouse.velocity_th,0.0,_turnVelocity, 90.0*2.0 * 1.414);
+			break;
+		case 4:	// 135行き斜め
+			_turnVelocity = 1500.0f;
+			mouse.satartSuction();
+			wait_timer(500);
+			mouse.end_flag = 1;
+			mouse.straight(10000.0,0.0,_turnVelocity,_turnVelocity, 180.0);
+			mouse.s_turn(gdturn_L_135_1500);
+			LED06=1;
+			mouse.end_flag = 1;
+			mouse.straight(10000.0,mouse.velocity_th,0.0,_turnVelocity, 90.0*2.0 * 1.414);
+			break;
+		case 5:	// 45帰り斜め
+			_turnVelocity = 1500.0f;
+			mouse.satartSuction();
+			wait_timer(500);
+			mouse.end_flag = 1;
+			mouse.straight(10000.0,0.0,_turnVelocity,_turnVelocity, 90.0*2.0 * 1.414);
+			mouse.s_turn(rdturn_L_45_1500);
+			LED06=1;
+			mouse.end_flag = 1;
+			mouse.straight(10000.0,mouse.velocity_th,0.0,_turnVelocity, 180.0);
+			break;
+		case 6:	// 135帰り斜め
+			_turnVelocity = 1500.0f;
+			mouse.satartSuction();
+			wait_timer(500);
+			mouse.end_flag = 1;
+			mouse.straight(10000.0,0.0,_turnVelocity,_turnVelocity, 90.0*2.0 * 1.414);
+			mouse.s_turn(rdturn_L_135_1500);
+			LED06=1;
+			mouse.end_flag = 1;
+			mouse.straight(10000.0,mouse.velocity_th,0.0,_turnVelocity, 180.0);
+			break;
+		case 7:	// V90斜め
+			_turnVelocity = 1500.0f;
+			mouse.satartSuction();
+			wait_timer(500);
+			mouse.end_flag = 1;
+			mouse.straight(10000.0,0.0,_turnVelocity,_turnVelocity, 90.0 * 2.0 * 1.414);
+			mouse.s_turn(vturn_L_90_1500);
+			LED06=1;
+			mouse.end_flag = 1;
+			mouse.straight(10000.0,mouse.velocity_th,0.0,_turnVelocity, 90.0 * 2.0 * 1.414);
+			break;
+		default:
+			break;
+		}
+		break;
+	case 1: // 右スラロームオフセット調整用
+		mouse.flag.bit.enable_phot = 0;
+		mode = 0;
+		modeSelect(6);
+		mouse.flag.bit.enable_phot = 0;
+		mouse.velocity_th = 0.0;
+		mouse.flag.bit.diagonal = 1;
+		mouse.gyro.initMPU();
+		mouse.gyro.calibration();
+		LED_off();
+		wait_timer(150);
+		switch(mode){
+		case 0:	// 90小回700
+			mouse.end_flag = 1;
+			mouse.straight(6000.0,0.0,700.0,700.0, 90.0);
+			mouse.s_turn(sturn_R_90_700);
+			mouse.end_flag = 1;
+			mouse.straight(6000.0,mouse.velocity_th,0.0,700.0, 90.0);
+			break;
+		case 1:	// 90大回り
+			_turnVelocity = 1500.0f;
+			mouse.satartSuction();
+			wait_timer(500);
+			mouse.end_flag = 1;
+			mouse.straight(10000.0,0.0,_turnVelocity,_turnVelocity, 180.0);
+			mouse.s_turn(lturn_R_90_1500);
+			LED06=1;
+			mouse.end_flag = 1;
+			mouse.straight(10000.0,mouse.velocity_th,0.0,_turnVelocity, 180.0);
+			break;
+		case 2:	// 180大回り
+			_turnVelocity = 1500.0f;
+			mouse.satartSuction();
+			wait_timer(500);
+			mouse.end_flag = 1;
+			mouse.straight(10000.0,0.0,_turnVelocity,_turnVelocity, 180.0);
+			mouse.s_turn(lturn_R_180_1500);
+			LED06=1;
+			mouse.end_flag = 1;
+			mouse.straight(10000.0,mouse.velocity_th,0.0,_turnVelocity, 180.0);
+			break;
+		case 3:	// 45行き斜め
+			_turnVelocity = 1500.0f;
+			mouse.satartSuction();
+			wait_timer(500);
+			mouse.end_flag = 1;
+			mouse.straight(10000.0,0.0,_turnVelocity,_turnVelocity, 180.0);
+			mouse.s_turn(gdturn_R_45_1500);
+			LED06=1;
+			mouse.end_flag = 1;
+			mouse.straight(10000.0,mouse.velocity_th,0.0,_turnVelocity, 90.0*2.0 * 1.414);
+			break;
+		case 4:	// 135行き斜め
+			_turnVelocity = 1500.0f;
+			mouse.satartSuction();
+			wait_timer(500);
+			mouse.end_flag = 1;
+			mouse.straight(10000.0,0.0,_turnVelocity,_turnVelocity, 180.0);
+			mouse.s_turn(gdturn_R_135_1500);
+			LED06=1;
+			mouse.end_flag = 1;
+			mouse.straight(10000.0,mouse.velocity_th,0.0,_turnVelocity, 90.0*2.0 * 1.414);
+			break;
+		case 5:	// 45帰り斜め
+			_turnVelocity = 1500.0f;
+			mouse.satartSuction();
+			wait_timer(500);
+			mouse.end_flag = 1;
+			mouse.straight(10000.0,0.0,_turnVelocity,_turnVelocity, 90.0*2.0 * 1.414);
+			mouse.s_turn(rdturn_R_45_1500);
+			LED06=1;
+			mouse.end_flag = 1;
+			mouse.straight(10000.0,mouse.velocity_th,0.0,_turnVelocity, 180.0);
+			break;
+		case 6:	// 135帰り斜め
+			_turnVelocity = 1500.0f;
+			mouse.satartSuction();
+			wait_timer(500);
+			mouse.end_flag = 1;
+			mouse.straight(10000.0,0.0,_turnVelocity,_turnVelocity, 90.0*2.0 * 1.414);
+			mouse.s_turn(rdturn_R_135_1500);
+			LED06=1;
+			mouse.end_flag = 1;
+			mouse.straight(10000.0,mouse.velocity_th,0.0,_turnVelocity, 180.0);
+			break;
+		case 7:	// V90斜め
+			_turnVelocity = 1500;
+			log01.flag.bit.dps = 1;
+			mouse.satartSuction();
+			wait_timer(500);
+			mouse.flag.bit.enable_phot = 1;
+			mouse.end_flag = 1;
+			mouse.straight(10000.0,0.0,_turnVelocity,_turnVelocity, 90.0 * 2.0 * 1.414);
+			mouse.flag.bit.enable_phot = 0;
+			mouse.s_turn(vturn_R_90_1500);
+			LED06=1;
+			mouse.end_flag = 1;
+			mouse.flag.bit.enable_phot = 0;
+			mouse.straight(10000.0,mouse.velocity_th,0.0,_turnVelocity, 90.0 * 2.0 * 1.414);
+			LED06=0;
+			break;
+		default:
+			break;
+		}
+		break;
+	case 2:
+		mouse.gyro.initMPU();
+		mouse.gyro.calibration();
+		LED_off();
+		for(int i=0; i<4; i++){
+			wait_timer(500);
+			mouse.flag.bit.enable_phot = 0;
+			mouse.turn(500.0, 180.5, L); // 左超信知旋回
+		}
+		break;
+	case 3:
+		mouse.gyro.initMPU();
+		mouse.gyro.calibration();
+		LED_off();
+		for(int i=0; i<1; i++){
+			wait_timer(500);
+			mouse.flag.bit.enable_phot = 0;
+			mouse.turn(500.0, 360.0, R); // 右超信知旋回
+		}
+		break;
+	case 4:	// 探索左スラローム角度調整用
+		mouse.gyro.initMPU();
+		mouse.gyro.calibration();
+		LED_off();
+		mouse.flag.bit.enable_phot = 0;
+		mouse.end_flag = 1;
+		mouse.straight(5000.0,0.0,500.0,500.0, 90.0);
+		for(int i=0; i<11; i++){
+			mouse.end_flag = 1;
+			mouse.s_turn(sturn_L_90_500);
+		}
+		mouse.end_flag = 1;
+		mouse.straight(5000.0,mouse.velocity_th,0.0,500.0, 90.0);
+		break;
+	case 5: // 探索右スラローム角度調整用
+		mouse.gyro.initMPU();
+		mouse.gyro.calibration();
+		LED_off();
+		mouse.flag.bit.enable_phot = 0;
+		mouse.end_flag = 1;
+		mouse.straight(5000.0,0.0,500.0,500.0, 90.0);
+		for(int i=0; i<11; i++){
+			mouse.end_flag = 1;
+			mouse.s_turn(sturn_R_90_500);
+		}
+		mouse.end_flag = 1;
+		mouse.straight(5000.0,mouse.velocity_th,0.0,500.0, 90.0);
+		break;
+	case 6: // 補正無直線調整用
+		mouse.gyro.initMPU();
+		mouse.gyro.calibration();
+		LED_off();
+		//mouse.satartSuction();
+		mouse.flag.bit.enable_phot = 1;
+		mouse.end_flag = 1;
+		mouse.flag.bit.wallfix_SS = 0;
+		mouse.flag.bit.wallfix_S = 0;
+		mouse.flag.bit.diagonal = 0;
+		mouse.straight(8000.0,0.0, 0.0,500.0, 180.0f * 2.0f);
+		wait_timer(1000);
+		break;
+	case 7: // 壁切れ直線調整用
+		mouse.gyro.initMPU();
+		mouse.gyro.calibration();
+		LED_off();
+		mouse.satartSuction();
+		mouse.flag.bit.enable_phot = 1;
+		mouse.end_flag = 0;
+		mouse.flag.bit.wallfix_SS = 0;
+		mouse.flag.bit.wallfix_S = 1;
+		mouse.flag.bit.diagonal = 0;
+		mouse.straight(10000.0,0.0,1000.0,2000.0, 540.0 + 90.0);
+		//mouse.s_turn(lturn_L_180_1000);
+		LED01 = 1;
+		mouse.end_flag = 1;
+		mouse.flag.bit.diagonal = 1;
+		mouse.s_turn(gdturn_R_135_1000);
+		LED01 = 0;
+		LED02 = 1;
+		mouse.end_flag = 1;
+		mouse.flag.bit.diagonal = 1;
+		mouse.s_turn(vturn_L_90_1000);
+		LED02 = 0;
+		LED03 = 1;
+		mouse.end_flag = 1;
+		mouse.flag.bit.diagonal = 1;
+		mouse.s_turn(vturn_R_90_1000);
+		LED03 = 0;
+		LED04 = 1;
+		mouse.end_flag = 1;
+		mouse.flag.bit.diagonal = 1;
+		mouse.s_turn(vturn_L_90_1000);
+		LED04 = 0;
+		LED05 = 1;
+		mouse.end_flag = 1;
+		mouse.flag.bit.diagonal = 1;
+		mouse.s_turn(vturn_R_90_1000);
+		LED05 = 0;
+		mouse.end_flag = 1;
+		mouse.flag.bit.diagonal = 1;
+		mouse.flag.bit.enable_phot = 0;
+		mouse.flag.bit.wallfix_SS = 0;
+		mouse.flag.bit.wallfix_S = 0;
+		mouse.end_flag = 0;
+		mouse.straight(10000.0, mouse.velocity_th, 1000.0, 2000.0, 90.0 * 1.414 * 2);
+		mouse.end_flag = 1;
+		mouse.flag.bit.diagonal = 1;
+		mouse.s_turn(rdturn_R_135_1000);
+		mouse.end_flag = 1;
+		mouse.flag.bit.enable_phot = 1;
+		mouse.straight(15000.0, mouse.velocity_th, 0.0, 1000.0, 90.0);
+		mouse.end_flag = 1;
+		mouse.flag.bit.enable_phot = 1;
+		//mouse.straight(10000.0,mouse.velocity_th,0.0,2000.0, 450.0);
+//		mouse.straight(10000.0,2000.0,0.0,2000.0, 90.0 * 1.4141);
+		wait_timer(1000);
+		break;
+	case 8: // その他
+		mouse.gyro.initMPU();
+		mouse.gyro.calibration();
+		LED_off();
+		mouse.satartSuction();
+		mouse.flag.bit.enable_phot = 1;
+		mouse.end_flag = 0;
+		mouse.flag.bit.wallfix_SS = 0;
+		mouse.flag.bit.wallfix_S = 1;
+		mouse.flag.bit.diagonal = 1;
+		mouse.straight(10000.0,0.0,1000.0,3000.0, 630.0 * 1.4141 + 20.0);
+		mouse.end_flag = 1;
+		mouse.s_turn(rdturn_L_135_1000);
+		mouse.end_flag = 1;
+		mouse.flag.bit.enable_phot = 1;
+		mouse.s_turn(gdturn_L_45_1000);
+		mouse.flag.bit.enable_phot = 1;
+		mouse.end_flag = 0;
+		mouse.flag.bit.wallfix_SS = 0;
+		mouse.flag.bit.wallfix_S = 1;
+		mouse.flag.bit.diagonal = 1;
+		mouse.straight(10000.0,1000.0,1000.0,3000.0, 180.0 * 1.4141 + 20.0);
+		mouse.end_flag = 1;
+		mouse.s_turn(rdturn_R_135_1000);
+		mouse.end_flag = 1;
+		mouse.flag.bit.enable_phot = 1;
+		mouse.s_turn(gdturn_R_45_1000);
+		mouse.end_flag = 1;
+		mouse.straight(10000.0,1000.0,1000.0,3000.0, 90.0 * 1.4141 + 0.0);
+		mouse.end_flag = 1;
+		mouse.s_turn(rdturn_R_45_1000);
+		mouse.flag.bit.enable_phot = 1;
+		mouse.end_flag = 1;
+		mouse.straight(10000.0,1000.0,0.0,3000.0, 360.0);
+		//mouse.end_flag = 1;
+		//mouse.straight(8000.0,1000.0,0.0,1000.0, 90.0 * 1.4141);
+		wait_timer(1000);
+		break;
+	}
+	wait_timer(100);
+	mouse.stopSuction();
+	mode = 0;
+}
+
+void mode07(void){	// ログモード
+	mode = 0;
+	modeSelect(3);
+	mouse.gyro.initMPU();
+	mouse.gyro.calibration();
+	LED_off();
+	mouse.motor_l.enable();		// left motor on
+	mouse.motor_r.enable();		// right motor on
+	switch(mode){
+	case 0:	// 横壁センサ値取得
+		mouse.flag.bit.enable_phot = 1;
+		mouse.end_flag = 1;
+		log01.flag.bit.photo_SS = 1;
+		mouse.straight(7000.0,0.0,0.0,700.0, 180.0 * 4.0);
+		log01.flag.bit.photo_SS = 0;
+		break;
+	case 1: // 縦壁センサ値取得
+		mouse.flag.bit.enable_phot = 1;
+		mouse.end_flag = 1;
+		log01.flag.bit.photo_F = 1;
+		mouse.straight(7000.0,0.0,0.0,700.0, 180.0 * 4.0);
+		log01.flag.bit.photo_F = 0;
+		break;
+	case 2: // 斜壁センサ値取得
+		mouse.flag.bit.enable_phot = 0;
+		mouse.end_flag = 1;
+		log01.flag.bit.photo_S = 1;
+		mouse.straight(7000.0,0.0,0.0,700.0, 180.0 * 3.0);
+		log01.flag.bit.photo_S = 0;
+		break;
+	case 3:	// ログ表示
+		mouse.motor_l.disable();		// left motor on
+		mouse.motor_r.disable();		// right motor on
+		for(int i=0; i<log01.num2; i++){
+			myprintf("%f %f\r\n",log01.buf1[i],log01.buf2[i]);
+		}
+		break;
+	}
+	mode = 0;
+}
+
+void mode08(void){
+	maze.printfMap(maze.wall);
+}
+
+void mode09(void){
+	mouse.gyro.initMPU();
+	mouse.gyro.calibration();
+	LED_off();
+	while(1){
+		myprintf("%d %d %d %d %d %d\r\n",mouse.photo.value[0],mouse.photo.value[1],mouse.photo.value[2],mouse.photo.value[3],mouse.photo.value[4],mouse.photo.value[5]);
+		//myprintf("%3.2f %3.2f\r\n",mouse.gyro.z_angle,mouse.gyro.z_dps - mouse.gyro.z_dps_offset);
+	}
+}
+
+void mode10(void){
+	mouse.gyro.initMPU();
+	mouse.gyro.calibration();
+	mouse.flag.byte = 0x17;
+	mouse.motor_l.enable();		// left motor on
+	mouse.motor_r.enable();		// right motor on
+	while(1){
+		mouse.velocity_th = 0;
+	}
+}
+
+void mode11(void){
+	while(1){
+		mouse.gyro.getAccel();
+		myprintf("%d %d\r\n",mouse.photo.value[2],mouse.photo.buf[2]);
+	}
+}
+
+void mode12(void){
+	mouse.flag.byte = 0x0000;
+	mouse.flag.bit.diagonal = 0;
+	mouse.gyro.initMPU();
+	mouse.gyro.calibration();
+	LED_off();
+	//mouse.satartSuction();
+	wait_timer(1500);
+	mouse.flag.bit.enable_phot = 1;
+	mouse.end_flag = 1;
+	mouse.flag.bit.wallfix_SS = 1;
+	mouse.flag.bit.wallfix_S = 0;
+	mouse.straight(8000.0,0.0,1000.0,3000.0, 180.0 * 6.0);
+	for(int i=0; i<6;i++){
+		mouse.s_turn(lturn_L_90_1000);
+		mouse.flag.bit.enable_phot = 1;
+		mouse.straight(8000.0,1000.0,1000.0,3000.0, 180.0 * 2.0);
+		mouse.s_turn(lturn_L_90_1000);
+		mouse.flag.bit.enable_phot = 0;
+		mouse.straight(8000.0,1000.0,1000.0,3000.0, 180.0 * 5.0);
+	}
+	mouse.straight(8000.0,1000.0,0.0,1000.0, 180.0);
+	wait_timer(1000);
+}
+
+void mode13(void){
+	mouse.gyro.initMPU();
+	mouse.gyro.calibration();
+	LED_off();
+	//SpeakerEnable();
+	CSTR (CMT2) = 0;		// CMT2開始
+	mouse.flag.bit.adati_flag = 1;
+	mouse.flag.bit.wallfix_SS = 1;
+	mouse.flag.bit.wallfix_S = 0;
+	maze.direction_vectle[0] = 0;
+	maze.direction_vectle[1] = 1;
+	maze.now_position[0] = 0;
+	maze.now_position[1] = 0;
+	maze.adatihou(X_GOAL,Y_GOAL);
+	mouse.flag.bit.adati_flag = 0;
+}
+
+void mode14(void){
+//	mouse.gyro.initMPU();
+//	mouse.gyro.calibration();
+//	myprintf("%f\r\n",mouse.gyro.z_dps_offset);
+////	while(1) {
+////		mouse.gyro.getDisp();
+////		wait_timer(1);
+////		myprintf("%f\r\n",mouse.gyro.z_dps);
+////	}
+}
+
+void mode15(void){
+	mouse.satartSuction();
+	wait_timer(1000);
+	mouse.stopSuction();
+}
+
+//-------------------------------------------------------------------
+//	その他関数
+//-------------------------------------------------------------------
+
+void LED_off(void) {
+	LED01 = 0;
+	LED02 = 0;
+	LED03 = 0;
+	LED04 = 0;
+	LED05 = 0;
+	LED06 = 0;
+}
+
+void LED_on(void){
+	LED01 = 1;
+	LED02 = 1;
+	LED03 = 1;
+	LED04 = 1;
+	LED05 = 1;
+	LED06 = 1;
+}
+
+void checkBattery(void) {
+	float value = 0;
+	for (int i = 0; i < 100; i++) {
+		S12AD.ADCSR.BIT.ADST = 1;			// AD変換開始
+		while (S12AD.ADCSR.BIT.ADST != 0) { // AD変換終了待機
+		}
+
+		value += (float) (S12AD.ADDR0) / 4095.0 * 3.3 * (1470.0 / 470.0);
+	}
+	value /= 100;
+	myprintf("%f[V]\r\n", value);
+	if (value < 7.7) {
+		while (1) {
+			LED01 = 0;
+			LED02 = 0;
+			LED03 = 0;
+			LED04 = 0;
+			LED05 = 0;
+			LED06 = 0;
+			wait_timer(500);
+			LED01 = 1;
+			LED02 = 1;
+			LED03 = 1;
+			LED04 = 1;
+			LED05 = 1;
+			LED06 = 1;
+			wait_timer(500);
+		}
+	}
+}
+
+void modeSelect(char num){
+	LED_off();
+	LED05 = 1;
+	LED06 = 1;
+	while(1){
+		if(mouse.enc_r.velocity > 150 || mouse.enc_r.velocity < -150){
+			if(mouse.enc_r.velocity < -150) mode --;
+			else mode ++;
+			if(mode < 0) mode = num+1;
+			if(mode > num+1) mode = 0;
+			LED_off();
+			SpeakerEnable();
+			switch(mode){
+			case 0:
+				LED05 = 1;
+				LED06 = 1;
+				buzzer_on(C_6, 16.000000, 200);
+				buzzer_on(E_6, 16.000000, 200);
+				break;
+			case 1:
+				LED04 = 1;
+				buzzer_on(Eb_4, 16.000000, 200);
+				buzzer_on(Gb_4, 16.000000, 200);
+				break;
+			case 2:
+				LED03 = 1;
+				buzzer_on(Gb_4, 16.000000, 200);
+				buzzer_on(A_4, 16.000000, 200);
+				break;
+			case 3:
+				LED03 = 1;
+				LED04 = 1;
+				buzzer_on(A_4, 16.000000, 200);
+				buzzer_on(C_5, 16.000000, 200);
+				break;
+			case 4:
+				LED02 = 1;
+				buzzer_on(C_5, 16.000000, 200);
+				buzzer_on(Eb_5, 16.000000, 200);
+				break;
+			case 5:
+				LED02 = 1;
+				LED04 = 1;
+				buzzer_on(Eb_5, 16.000000, 200);
+				buzzer_on(Gb_5, 16.000000, 200);
+				break;
+			case 6:
+				LED02 = 1;
+				LED03 = 1;
+				buzzer_on(Gb_5, 16.000000, 200);
+				buzzer_on(A_5, 16.000000, 200);
+				break;
+			case 7:
+				LED02 = 1;
+				LED03 = 1;
+				LED04 = 1;
+				buzzer_on(A_5, 16.000000, 200);
+				buzzer_on(C_6, 16.000000, 200);
+				break;
+			case 8:
+				LED01 = 1;
+				buzzer_on(C_6, 16.000000, 200);
+				buzzer_on(Eb_6, 16.000000, 200);
+				break;
+			case 9:
+				LED01 = 1;
+				LED04 = 1;
+				buzzer_on(Eb_6, 16.000000, 200);
+				buzzer_on(Gb_6, 16.000000, 200);
+				break;
+			case 10:
+				LED01 = 1;
+				LED03 = 1;
+				buzzer_on(Gb_6, 16.000000, 200);
+				buzzer_on(A_6, 16.000000, 200);
+				break;
+			case 11:
+				LED01 = 1;
+				LED03 = 1;
+				LED04 = 1;
+				buzzer_on(A_6, 16.000000, 200);
+				buzzer_on(C_7, 16.000000, 200);
+				break;
+			case 12:
+				LED01 = 1;
+				LED02 = 1;
+				buzzer_on(C_7, 16.000000, 200);
+				buzzer_on(Eb_7, 16.000000, 200);
+				break;
+			case 13:
+				LED01 = 1;
+				LED02 = 1;
+				LED04 = 1;
+				buzzer_on(Eb_7, 16.000000, 200);
+				buzzer_on(Gb_7, 16.000000, 200);
+				break;
+			case 14:
+				LED01 = 1;
+				LED02 = 1;
+				LED03 = 1;
+				buzzer_on(Gb_7, 16.000000, 200);
+				buzzer_on(A_7, 16.000000, 200);
+				break;
+			case 15:
+				LED01 = 1;
+				LED02 = 1;
+				LED03 = 1;
+				LED04 = 1;
+				buzzer_on(A_7, 16.000000, 200);
+				buzzer_on(C_8, 16.000000, 200);
+				break;
+			}
+			SpeakerDisable();
+			mouse.enc_r.velocity = 0;
+			wait_timer(10);
+		}
+		if(mouse.photo.value[4] > 1100) break;
+	}
+	for(int i=0;i<3;i++){
+		LED_on();
+		wait_timer(100);
+		LED_off();
+		wait_timer(100);
+	}
+	while(1){
+		if(mouse.photo.value[1] > 800 && mouse.photo.value[4] > 800) {
+			LED_on();
+			wait_timer(1000);
+			break;
+		}
+		if(mouse.photo.value[0] > 2000 && mouse.photo.value[5] > 2000) {
+			mode = 0;
+			wait_timer(100);
+			break;
+		}
+	}
+	LED_off();
+}
+
+#ifdef __cplusplus
+void abort(void) {
+
+}
+#endif

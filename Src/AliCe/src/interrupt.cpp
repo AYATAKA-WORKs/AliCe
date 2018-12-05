@@ -27,7 +27,8 @@ extern "C" void interrupt_cmt0(void){
 		mouse.getControlDuty(mouse.velocity_th, mouse.velocity_th,0.0);
 		mouse.velocity_me = (mouse.enc_l.velocity+mouse.enc_r.velocity)/2;
 		if(log01.flag.bit.dps == 1) log01.setLog(0.0,(mouse.gyro.z_dps-mouse.gyro.z_dps_offset));
-		else if(log01.flag.bit.velocity == 1) log01.setLog(mouse.ve_s_error_l,mouse.ve_s_error_r);
+		//else if(log01.flag.bit.velocity == 1) log01.setLog(mouse.ve_s_error_l,mouse.ve_s_error_r);
+		else if(log01.flag.bit.velocity == 1) log01.setLog(mouse.velocity_th,mouse.velocity_me);
 		else if(log01.flag.bit.deg == 1) log01.setLog(0.0,mouse.gyro.z_deg);
 	}
 	else if((mouse.flag.byte & 0x27) == 0x27){	// slalom left
@@ -92,8 +93,8 @@ extern "C" void interrupt_cmt1(void){
 	static int count = 0;
 	mouse.photo.readSensor();
 	// 壁センサログ取得
-//	if(log01.flag.bit.photo_SS == 1 && count == 0) log01.setLog(mouse.photo.value[2],mouse.photo.value[3]);
-	if(log01.flag.bit.photo_SS == 1 && count == 0) log01.setLog(mouse.photo.int_dev[2],mouse.photo.int_dev[3]);
+	if(log01.flag.bit.photo_SS == 1 && count == 0) log01.setLog(mouse.photo.value[2],mouse.photo.value[3]);
+//	if(log01.flag.bit.photo_SS == 1 && count == 0) log01.setLog(mouse.photo.int_dev[2],mouse.photo.int_dev[3]);
 	else if(log01.flag.bit.photo_F == 1 && count == 0) log01.setLog(mouse.photo.value[0],mouse.photo.value[5]);
 //	else if(log01.flag.bit.photo_S == 1 && count == 0) log01.setLog(mouse.photo.value[1],mouse.photo.value[4]);
 	else if(log01.flag.bit.photo_S == 1 && count == 0) log01.setLog(mouse.photo.int_dev[1],mouse.photo.int_dev[4]);

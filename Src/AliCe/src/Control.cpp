@@ -66,7 +66,7 @@ float Control::getControlWall(void){
 			}
 		}
 		// 右壁制御
-		else if(photo.value[2] < SEN_RSS_TH && photo.value[3] > SEN_RSS_TH){
+		else if(photo.value[2] < SEN_LSS_TH && photo.value[3] > SEN_RSS_TH){
 			if(abs(photo.buf[3] - photo.value[3]) < SEN_RSS_DEV){
 				c_value = 2.0 * (Kp * ph_error[1][3] + Kd * ph_d_error[3]);
 			}
